@@ -139,4 +139,30 @@ class User {
 		
 	}
 	
+	
+	/**
+	 * ユーザーキー取得
+	 * @param int $userId
+	 * @return string $userKey
+	 */
+	public static function getUserKeyByUserId( $userId ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userId:' . $userId );
+		
+		$userKey = NULL;
+		
+		$valueArray = DataClassFactory::getUserBaslcDataObj() -> getDataByUserId( $userId );
+		if ( count( $valueArray ) > 0 ) {
+			$userKey = $valueArray[0]['user_id'];
+		} else {
+			;
+		}
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userKey:' . $userKey );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		return $userKey;
+		
+	}
+	
 }

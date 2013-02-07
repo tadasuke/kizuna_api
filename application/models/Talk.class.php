@@ -1,13 +1,40 @@
 <?php
 
+require_once 'bean/TalkBean.class.php';
+
 class Talk {
+	
+	//---------------------------
+	// シングルトンにするためのモロモロ
+	//---------------------------
+	/**
+	 * インスタンス
+	 * @var Talk
+	 */
+	private static $instance = NULL;
+	public static function getInstance() {
+		if ( is_null( self::$instance ) === TRUE ) {
+			self::$instance = new self();
+		} else {
+			;
+		}
+		return self::$instance;
+	}
+	private function __construct() {
+		;
+	}
 	
 	/**
 	 * トークビーン配列
 	 * @var array[TalkBean]
 	 */
-	private $talkBeanArray = array();
-	public function getTalkBeanArray() {
+	private $talkBeanArray = NULL;
+	public function getTalkBeanArray( $regetFlg = FALSE ) {
+		if ( is_null( $this -> talkBeanArray ) === TRUE || $regetFlg === TRUE ) {
+			$this -> setTalkBeanArray();
+		} else {
+			;
+		}
 		return $this -> talkBeanArray;
 	}
 	
@@ -34,7 +61,7 @@ class Talk {
 	 * @var string
 	 */
 	private $searchUserId = NULL;
-	public function setSearchId( $searchUserId ) {
+	public function setSearchUserId( $searchUserId ) {
 		$this -> searchUserId = $searchUserId;
 	}
 	
@@ -56,15 +83,63 @@ class Talk {
 		$this -> startTalkSeqId = $startTalkSeqId;
 	}
 	
+	//-------------------------------------- public -----------------------------------------
+	
 	/**
-	 * トークデータ取得
+	 * トークビーン配列初期化
 	 */
-	public function getTalkData() {
+	public function resetTalkBeanArray() {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
-		$talkDataValueArray = DataClassFactory::getTalkDataObj() -> getData( $this -> getRecordCount, $this -> searchTalkSeqId, $this -> searchUserId, $this -> searchThemeId, $this -> getRecordCount );
+		$this -> talkBeanArray = NULL;
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
+	
+	
+	//--------------------------------------- private ---------------------------------------------
+	
+	/**
+	 * トークデータ取得
+	 */
+	private function setTalkBeanArray() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		$talkDataValueArray = DataClassFactory::getTalkDataObj() -> getData( $this -> getRecordCount, $this -> searchTalkSeqId, $this -> searchUserId, $this -> searchThemeId, $this -> startTalkSeqId );
+		
+		$talkBeanArray = array();
+		foreach ( $talkDataValueArray as $data ) {
+			$seqId    = $data['seq_id'];
+			$userId   = $data['user_id'];
+			$themeId  = $data['theme_id'];
+			$talk     = $data['talk'];
+			$talkType = $data['talk_type'];
+			$talkDate = $data['talk_date'];
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'seqId:'    . $seqId );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userId:'   . $userId );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:'  . $themeId );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk:'     . $talk );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkType:' . $talkType );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkDate:' . $talkDate );
+			
+			$talkBean = new TalkBean();
+			$talkBean -> setTaklSeqId( $seqId );
+			$talkBean -> setTalkUserId( $userId );
+			$talkBean -> setThemeId( $themeId );
+			$talkBean -> setTalk( $talk );
+			$talkBean -> setTalkType( $talkType );
+			$talkBean -> setTalkDate( $talkDate );
+			$talkBeanArray[] = $talkBean;
+		}
+		
+		$this -> talkBeanArray = $talkBeanArray;
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 	}
+	
+	
+	
 }

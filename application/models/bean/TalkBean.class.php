@@ -1,6 +1,6 @@
 <?php
 
-class TaklBean {
+class TalkBean {
 	
 	/**
 	 * トークシーケンスID
@@ -51,6 +51,18 @@ class TaklBean {
 	}
 	
 	/**
+	 * トークタイプ
+	 * @var string
+	 */
+	private $talkType = NULL;
+	public function setTalkType( $talkType ) {
+		$this -> talkType = $talkType;
+	}
+	public function getTalkType() {
+		return $this -> talkType;
+	}
+	
+	/**
 	 * トーク日時
 	 * @var string
 	 */
@@ -59,7 +71,7 @@ class TaklBean {
 		$this -> talkDate = $talkDate;
 	}
 	public function getTalkDate() {
-		return $this -> getTalkDate();
+		return $this -> talkDate;
 	}
 	
 	

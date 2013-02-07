@@ -1,6 +1,6 @@
 <?php
 
-class TalkData extends AK_Db {
+class TalkData extends AK_Db{
 	
 	/**
 	 * データ取得
@@ -10,7 +10,7 @@ class TalkData extends AK_Db {
 	 * @param int $getRecordCount
 	 * @param int $startSeqId
 	 */
-	public function getData( $getRecordCount = NULL, $seqId = NULL, $userId = NULL, $themeId = NULL, $startSeqId = NULL ) {
+	public function getData( $getRecordCount = NULL, $seqId = NULL, $userId = NULL, $themeId = NULL, $startSeqId = NULL, $userDeleteFlg = TALK_USER_DELTE_FLG_FALSE ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'seqId:'          . $seqId );
@@ -64,7 +64,14 @@ class TalkData extends AK_Db {
 			;
 		}
 		
-		$this -> sqlcmd .= "ORDER BY seq_id ";
+		if ( is_null( $userDeleteFlg ) === FALSE ) {
+			$this -> sqlcmd .= "AND user_delete_flg = ? ";
+			$this -> bindArray[] = $userDeleteFlg;
+		} else {
+			;
+		}
+		
+		$this -> sqlcmd .= "ORDER BY seq_id DESC ";
 		
 		if ( is_null( $getRecordCount ) === FALSE ) {
 			$this -> sqlcmd .= "LIMIT 0, " . $getRecordCount . " ";

@@ -1,6 +1,6 @@
 <?php
 
-class DataClassFactory {
+abstract class DataClassFactory {
 	
 	/**
 	 * ユーザ基本データ
