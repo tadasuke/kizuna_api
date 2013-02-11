@@ -10,7 +10,7 @@ class TalkData extends AK_Db{
 	 * @param int $getRecordCount
 	 * @param int $startSeqId
 	 */
-	public function getData( $getRecordCount = NULL, $seqId = NULL, $userId = NULL, $themeId = NULL, $startSeqId = NULL, $userDeleteFlg = TALK_USER_DELTE_FLG_FALSE ) {
+	public function getData( $getRecordCount = NULL, $seqId = NULL, $userId = NULL, $themeId = NULL, $startSeqId = NULL, $userDeleteFlg = Talk::TALK_USER_DELTE_FLG_FALSE ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'seqId:'          . $seqId );
@@ -81,6 +81,73 @@ class TalkData extends AK_Db{
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		return $this -> valueArray;
+	}
+	
+	
+	/**
+	 * インサート
+	 * @param int $userId
+	 * @param string $themeId
+	 * @param string $talk
+	 * @param string $talkType
+	 * @param int $imgSeqId
+	 * @param string $talkDate
+	 * @param string $userDeleteFlg
+	 */
+	public function insert( $userId, $themeId, $talk, $talkType, $imgSeqId, $talkDate, $userDeleteFlg ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userId:'        . $userId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:'       . $themeId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk:'          . $talk );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkType:'      . $talkType );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'imgSeqId:'      . $imgSeqId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkDate:'      . $talkDate );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userDeleteFlg:' . $userDeleteFlg );
+		
+		$this -> sqlcmd =
+			"INSERT INTO talk_data "
+			. "( "
+				. "  seq_id "
+				. ", user_id "
+				. ", theme_id "
+				. ", talk "
+				. ", talk_type "
+				. ", img_seq_id "
+				. ", talk_date "
+				. ", user_delete_flg "
+				. ", insert_time "
+			. ") VALUES ( "
+				. "  ? "
+				. ", ? "
+				. ", ? "
+				. ", ? "
+				. ", ? "
+				. ", ? "
+				. ", ? "
+				. ", ? "
+				. ", ? "
+			. ") "
+			;
+			
+		$this -> bindArray = array(
+			  0
+			, $userId
+			, $themeId
+			, $talk
+			, $talkType
+			, $imgSeqId
+			, $talkDate
+			, $userDeleteFlg
+			, date( 'YmdHis' )
+		);
+		
+		$talkSeqId = $this -> exec();
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqId:' . $talkSeqId );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		return $talkSeqId;
+		
 	}
 	
 }

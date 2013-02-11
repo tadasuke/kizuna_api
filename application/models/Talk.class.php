@@ -4,6 +4,24 @@ require_once 'bean/TalkBean.class.php';
 
 class Talk {
 	
+	const TALK_RESULT_COMPLETE       = '0';
+	const TALK_RESULT_THEME_ID_ERROR = '1';
+	
+	const TALK_USER_DELTE_FLG_FALSE = '0';
+	const TALK_USER_DELTE_FLG_TRUE  = '1';
+	
+	const COMMENT_RESULT_COMPLETE          = '0';
+	const COMMENT_RESULT_TALK_SEQ_ID_ERROR = '1';
+	
+	const COMMENT_USER_DLETE_FLG_FALSE = '0';
+	const COMMENT_USER_DLETE_FLG_TRUE  = '1';
+	
+	// トークシーケンスID
+	public static $talkSeqId = NULL;
+	
+	// コメントシーケンスID
+	public static $commentSeqId = NULL;
+	
 	//---------------------------
 	// シングルトンにするためのモロモロ
 	//---------------------------
@@ -133,6 +151,11 @@ class Talk {
 			$talkBean -> setTalkType( $talkType );
 			$talkBean -> setTalkDate( $talkDate );
 			$talkBeanArray[] = $talkBean;
+			
+			
+			$test = mb_detect_encoding( $talk );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'test:' . $test );
+			
 		}
 		
 		$this -> talkBeanArray = $talkBeanArray;
@@ -140,6 +163,134 @@ class Talk {
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 	}
 	
+	//----------------------------------- public static ------------------------------------
 	
+	/**
+	 * トーク実行
+	 * @param int $userId
+	 * @param string $themeId
+	 * @param string $takl
+	 * @param string $talkType
+	 * @return string $result
+	 */
+	public static function execTalk( $userId, $themeId, $talk, $talkType ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userId:'   . $userId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:'  . $themeId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk:'     . $talk );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkType:' . $talkType );
+		
+		//------------
+		// チェック処理
+		//------------
+		$result = self::checkTalk( $themeId );
+		
+		if ( strcmp( $result, self::TALK_RESULT_COMPLETE ) != 0 ) {
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+			return $result;
+		} else {
+			;
+		}
+		
+		// 書き込み
+		$talkSeqId = DataClassFactory::getTalkDataObj() -> insert( $userId, $themeId, $talk, $talkType, NULL, date( 'YmdHis' ), self::TALK_USER_DELTE_FLG_FALSE );
+		self::$talkSeqId = $talkSeqId;
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		return $result;
+		
+	}
+	
+	/**
+	 * コメント実行
+	 * @param int $userId
+	 * @param int $talkSeqId
+	 * @param string $comment
+	 * @return string $result
+	 */
+	public static function execComment( $userId, $talkSeqId, $comment ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userId:'    . $userId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqId:' . $talkSeqId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'comment:'   . $comment );
+		
+		//------------
+		// チェック処理
+		//------------
+		$result = self::checkComment( $talkSeqId );
+		if ( strcmp( $result, self::TALK_RESULT_COMPLETE ) != 0 ) {
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+			return $result;
+		} else {
+			;
+		}
+		
+		// コメント書き込み
+		$commentSeqId = DataClassFactory::getCommentDataObj() -> insert( $talkSeqId, $userId, $comment, date( 'YmdHis' ), self::COMMENT_USER_DLETE_FLG_FALSE );
+		self::$commentSeqId = $commentSeqId;
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+		return $result;
+		
+	}
+	
+	//----------------------------------- priavte static ------------------------------------
+	
+	/**
+	 * トークチェック
+	 * @param string $themeId
+	 * @return string $result
+	 */
+	private static function checkTalk( $themeId ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:' . $themeId );
+		
+		//---------------
+		// テーマIDチェック
+		//---------------
+		$themeMasterValueArray = DataClassFactory::getThemeMasterObj() -> getDataByThemeId( $themeId );
+		if ( count( $themeMasterValueArray ) == 0 ) {
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'theme_id_error!!' );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+			return self::TALK_RESULT_THEME_ID_ERROR;
+		} else {
+			;
+		}
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		return self::TALK_RESULT_COMPLETE;
+		
+	}
+	
+	
+	/**
+	 * コメントチェック
+	 * @param int $talkSeqId
+	 */
+	private static function checkComment( $talkSeqId ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqId:' . $talkSeqId );
+		
+		//-----------------------
+		// トークシーケンスIDチェック
+		//-----------------------
+		$talkDataValueArray = DataClassFactory::getTalkDataObj() -> getData( NULL, $talkSeqId );
+		if ( count( $talkDataValueArray ) == 0 ) {
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk_seq_id_error!!' );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+			return self::COMMENT_RESULT_TALK_SEQ_ID_ERROR;
+		} else {
+			;
+		}
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		return self::COMMENT_RESULT_COMPLETE;
+		
+	}
 	
 }

@@ -6,6 +6,23 @@
 </head>
 <body>
 
+<h1>コメント!!</h1>
+<form action="http://dev_api.ki2na.jp/talk/comment" method="get">
+talk_seq_id:<input type="text" name="talk_seq_id" value=""/><br/>
+comment:<input type="text" name="comment" value=""/><br/>
+<input type="submit" value="GO"/>
+</form>
+<hr/>
+
+<h1>トーク!!</h1>
+<form action="http://dev_api.ki2na.jp/talk/talk" method="get">
+theme_id:<input type="text" name="theme_id" value=""/><br/>
+talk:<input type="text" name="talk" value=""/><br/>
+talk_type:<input type="text" name="talk_type" value=""/><br/>
+<input type="submit" value="GO"/>
+</form>
+<hr/>
+
 <h1>トークデータ取得</h1>
 <form action="http://dev_api.ki2na.jp/talk/get-talk-data" method="get">
 theme_id:<input type="text" name="theme_id" value=""/><br/>

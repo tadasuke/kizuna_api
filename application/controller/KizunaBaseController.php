@@ -43,8 +43,7 @@ class KizunaBaseController extends AK_BaseController {
 		//------------------
 		// ログイン済みチェック
 		//------------------
-		$userId = NULL;
-		$result = $this -> isLogin( $userId );
+		$result = $this -> isLogin();
 		if ( $result === FALSE ) {
 			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'no_login_error!!' );
 			AK_Registry::set( REGISTRY_ERROR_FLG_NAME, RESULT_LOGIN_ERROR );
@@ -65,6 +64,13 @@ class KizunaBaseController extends AK_BaseController {
 	public function afterRun() {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		// DBコミット
+		$daoArray = AK_DaoFactory::getAllDao();
+		foreach ( $daoArray as $dao ) {
+			$dao -> commit();
+		}
+		
 		
 		// レスポンスパラメータに値を追加
 		if ( AK_Registry::isRegistry( REGISTRY_ERROR_FLG_NAME ) === FALSE ) {

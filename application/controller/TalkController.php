@@ -1,7 +1,6 @@
 <?php
 
 require_once 'application/models/Talk.class.php';
-//require_once BASE_PATH . 'application/models/UserFactory.class.php';
 
 class TalkController extends KizunaBaseController {
 	
@@ -75,8 +74,6 @@ class TalkController extends KizunaBaseController {
 		$talkDataArray = array();
 		foreach ( $talkBeanArray as $talkBean ) {
 			
-			User::getUserIdFromUserKey($userKey);
-			
 			$talkDataArray[] = array(
 				  'talk_seq_id'   => $talkBean -> getTalkSeqId()
 				, 'talk'          => $talkBean -> getTalk()
@@ -87,6 +84,74 @@ class TalkController extends KizunaBaseController {
 		}
 		
 		$this -> setResponseParam( array( 'talk_data' => $talkDataArray ) );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
+	
+	
+	/**
+	 * トーク実行
+	 */
+	public function talkAction() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		$themeId = $this -> getParam( 'theme_id' );
+		$talk    = $this -> getParam( 'talk' );
+		$talkType = $this -> getParam( 'talk_type' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:'  . $themeId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk:'     . $talk );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkType:' . $talkType );
+		
+		$talkSeqId = '';
+		
+		// 書き込み実行
+		$result = Talk::execTalk( $this -> playerUserId, $themeId, $talk, $talkType );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'result:' . $result );
+		
+		// 書き込み成功時には書き込みシーケンスIDを取得
+		$talkSeqId = (strcmp( $result, Talk::TALK_RESULT_COMPLETE ) == 0) ? Talk::$talkSeqId : $talkSeqId;
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqId:' . $talkSeqId );
+		
+		// レスポンス設定
+		$responseArray = array(
+			  'result'      => $result
+			, 'talk_seq_id' => $talkSeqId
+		);
+		$this -> setResponseParam( $responseArray );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
+	
+	
+	/**
+	 * コメント実行
+	 */
+	public function commentAction() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		$talkSeqId = $this -> getParam( 'talk_seq_id' );
+		$comment   = $this -> getParam( 'comment' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqId:' . $talkSeqId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'comment:'   . $comment );
+		
+		$commentSeqId = '';
+		
+		// コメント書き込み実行
+		$result = Talk::execComment( $this -> playerUserId, $talkSeqId, $comment );
+		
+		// コメント書き込み成功時にはコメントシーケンスIDを取得
+		$commentSeqId = (strcmp( $result, Talk::COMMENT_RESULT_COMPLETE ) == 0 ) ? Talk::$commentSeqId : $commentSeqId;
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'commentSeqId:' . $commentSeqId );
+		
+		// レスポンス設定
+		$responseArray = array(
+			  'result'         => $result
+			, 'comment_seq_id' => $commentSeqId
+		);
+		$this -> setResponseParam( $responseArray );
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		

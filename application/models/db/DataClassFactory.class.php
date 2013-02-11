@@ -47,4 +47,37 @@ abstract class DataClassFactory {
 		return self::$talkDataObj;
 	}
 	
+	/**
+	 * コメントデータ
+	 * @var CommentData
+	 */
+	private static $commentDataObj = NULL;
+	public static function getCommentDataObj() {
+		if ( is_null( self::$commentDataObj ) === TRUE ) {
+			require_once 'CommentData.class.php';
+			self::$commentDataObj = new CommentData();
+		} else {
+			;
+		}
+		return self::$commentDataObj;
+	}
+	
+	//------------------------- マスター系 ----------------------------------
+	
+	/**
+	 * テーママスタ
+	 * @var ThemeMaster
+	 */
+	private static $themeMasterObj = NULL;
+	public static function getThemeMasterObj() {
+		if ( is_null( self::$themeMasterObj ) === TRUE ) {
+			require_once 'ThemeMaster.class.php';
+			self::$themeMasterObj = new ThemeMaster();
+		} else {
+			;
+		}
+		return self::$themeMasterObj;
+	}
+	
+	
 }
