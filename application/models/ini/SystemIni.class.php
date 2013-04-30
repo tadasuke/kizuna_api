@@ -11,7 +11,7 @@ class SystemIni {
 				, 'login_key_delimiter' => '__'
 			)
 			, 'log_config' => array(
-				'path' => '/var/log/kizuna/api_dev'
+				'path' => '/var/log/ki2na/api'
 			)
 		)
 		// トーク設定
