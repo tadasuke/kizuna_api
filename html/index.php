@@ -14,9 +14,10 @@ require_once 'application/controller/KizunaBaseController.php';
 require_once 'application/models/db/DataClassFactory.class.php';
 require_once 'application/models/UserFactory.class.php';
 require_once 'application/models/KizunaException.class.php';
+require_once 'application/models/Library.class.php';
 require_once 'application/models/ini/DbIni.class.php';
 require_once 'application/models/ini/SystemIni.class.php';
-require_once 'application/lib/Define.php';
+require_once 'application//Define.php';
 
 // 設定情報登録
 AK_Ini::setConfigFromArray( DbIni::$configArray );

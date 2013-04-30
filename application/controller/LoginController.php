@@ -17,10 +17,26 @@ class LoginController extends KizunaBaseController {
 		$password    = $this -> getParam( 'password' );
 		$name        = $this -> getParam( 'name' );
 		
-		// パスワードをハッシュ化する
+		// 新規登録
+		$result = User::newEntry( $mailAddress, $password, $name );
 		
+		// 新規登録エラーの場合
+		if ( strcmp( $result, User::NEW_ENTRY_CHECK_NORMAL ) != 0 ) {
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'new_entry_error!!' );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+			$this -> setResponseParam( array( 'result' => $result ) );
+			return;
+		} else {
+			;
+		}
+		
+		// ログインクッキー設定
+		$this -> setLoginCookie( User::$newUserKey, User::$newHashPassword );
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		$this -> setResponseParam( array( 'result' => $result ) );
+		return;
+		
 	}
 	
 	
@@ -50,21 +66,17 @@ class LoginController extends KizunaBaseController {
 		// レスポンスパラメータ設定
 		$this -> addResponseParam( 'result', self::LOGIN_COMPLETE );
 		
-		// クッキーにログインキーをセット
+		// ログインクッキーを設定
 		$userKey  = $valueArray['user_key'];
-		$password = $valueArray['password'];
-		$keyName   = AK_Ini::getConfig( 'system_config', 'cookie_config', 'login_key_name' );
-		$keepTime  = AK_Ini::getConfig( 'system_config', 'cookie_config', 'keep_time' );
-		$delimiter = AK_Ini::getConfig( 'system_config', 'cookie_config', 'login_key_delimiter' );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'keyName:'   . $keyName );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'keepTime:'  . $keepTime );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'delimiter:' . $delimiter );
-		setcookie( $keyName, $userKey . $delimiter . $password, time() + $keepTime, '/' );
+		$hashPassword = $valueArray['password'];
+		$this -> setLoginCookie( $userKey, $hashPassword );
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		
 	}
 	
+	
+	//------------------------------------ protected ------------------------------------
 	
 	/**
 	 * ログイン確認処理
@@ -73,5 +85,33 @@ class LoginController extends KizunaBaseController {
 	protected function isLogin() {
 		return TRUE;
 	}
+	
+	
+	//------------------------------------ private ------------------------------------
+	
+	/**
+	 * ログインクッキー設定
+	 * @param string $userKey
+	 * @param string $hashPassword
+	 */
+	private function setLoginCookie( $userKey, $hashPassword ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userKey:'      . $userKey );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'hashPassword:' . $hashPassword );
+		
+		$keyName   = AK_Ini::getConfig( 'system_config', 'cookie_config', 'login_key_name' );
+		$keepTime  = AK_Ini::getConfig( 'system_config', 'cookie_config', 'keep_time' );
+		$delimiter = AK_Ini::getConfig( 'system_config', 'cookie_config', 'login_key_delimiter' );
+		
+		$cookieValue = $userKey . $delimiter . $hashPassword;
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'cookieValue:' . $cookieValue );
+		
+		setcookie( $keyName, $cookieValue, time() + $keepTime, '/' );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
+	
 	
 }
