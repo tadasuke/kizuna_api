@@ -4,10 +4,10 @@ class DbIni {
 	
 	public static $configArray = array(
 		'db_config' => array(
-			  'database_name' => 'new_kizunadb_dev'
+			  'database_name' => 'kizuna_db'
 			, 'host'          => 'localhost'
 			, 'user'          => 'kizuna'
-			, 'password'      => 'g4fsz3zEHLdE'
+			, 'password'      => 'jJ6CmATQ5BQ8'
 		)
 	);
 	

@@ -53,6 +53,23 @@ class KizunaBaseController extends AK_BaseController {
 			;
 		}
 		
+		//------------------
+		// レスポンスタイプ設定
+		//------------------
+		if ( strcmp( $this -> getParam( 'response_type' ), 'jsonp' ) == 0 ) {
+			$this -> setResponseType( self::RESPONSE_TYPE_JSONP );
+		} else {
+			;
+		}
+		
+		//------------------------
+		// リクエストパラメータログ出力
+		//------------------------
+		$paramArray = $this -> getAllParam();
+		foreach ( $paramArray as $key => $value ) {
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, $key . '=>' . $value );
+		}
+		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		
 	}
@@ -70,7 +87,6 @@ class KizunaBaseController extends AK_BaseController {
 		foreach ( $daoArray as $dao ) {
 			$dao -> commit();
 		}
-		
 		
 		// レスポンスパラメータに値を追加
 		if ( AK_Registry::isRegistry( REGISTRY_ERROR_FLG_NAME ) === FALSE ) {

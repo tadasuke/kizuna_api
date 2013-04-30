@@ -1,9 +1,28 @@
 <?php
 
-class IndexController extends KizunaBaseController {
+class LoginController extends KizunaBaseController {
 	
 	const LOGIN_COMPLETE = '0';
 	const LOGIN_ERROR    = '1';
+	
+	
+	/**
+	 * 新規登録
+	 */
+	public function newEntryAction() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		$mailAddress = $this -> getParam( 'mail_address' );
+		$password    = $this -> getParam( 'password' );
+		$name        = $this -> getParam( 'name' );
+		
+		// パスワードをハッシュ化する
+		
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+	}
+	
 	
 	/**
 	 * ログイン
