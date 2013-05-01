@@ -16,23 +16,23 @@ class UserFactory {
 	
 	/**
 	 * ユーザオブジェクト作成
-	 * @param int $userId
+	 * @param int $userNum
 	 * @return User
 	 */
-	public static function get( $userId ) {
+	public static function get( $userNum ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userId:' . $userId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:' . $userNum );
 		
-		if ( isset( self::$userObjArray[$userId] ) === FALSE ) {
-			self::$userObjArray[$userId] = new User( $userId );
+		if ( isset( self::$userObjArray[$userNum] ) === FALSE ) {
+			self::$userObjArray[$userNum] = new User( $userNum );
 		} else {
 			;
 		}
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 
-		return self::$userObjArray[$userId];
+		return self::$userObjArray[$userNum];
 		
 	}
 	

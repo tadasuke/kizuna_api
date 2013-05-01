@@ -83,37 +83,31 @@ class TalkData extends AK_Db{
 		return $this -> valueArray;
 	}
 	
-	
 	/**
 	 * インサート
-	 * @param int $userId
+	 * @param int $userNum
 	 * @param string $themeId
 	 * @param string $talk
-	 * @param string $talkType
-	 * @param int $imgSeqId
 	 * @param string $talkDate
 	 * @param string $userDeleteFlg
+	 * @return int $talkSeqNum
 	 */
-	public function insert( $userId, $themeId, $talk, $talkType, $imgSeqId, $talkDate, $userDeleteFlg ) {
+	public function insert( $userNum, $themeId, $talk, $talkDate, $userDeleteFlg ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userId:'        . $userId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:'       . $userNum );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:'       . $themeId );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk:'          . $talk );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkType:'      . $talkType );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'imgSeqId:'      . $imgSeqId );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkDate:'      . $talkDate );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userDeleteFlg:' . $userDeleteFlg );
 		
 		$this -> sqlcmd =
 			"INSERT INTO talk_data "
 			. "( "
-				. "  seq_id "
-				. ", user_id "
+				. "  seq_num "
+				. ", user_num "
 				. ", theme_id "
 				. ", talk "
-				. ", talk_type "
-				. ", img_seq_id "
 				. ", talk_date "
 				. ", user_delete_flg "
 				. ", insert_time "
@@ -125,28 +119,24 @@ class TalkData extends AK_Db{
 				. ", ? "
 				. ", ? "
 				. ", ? "
-				. ", ? "
-				. ", ? "
 			. ") "
 			;
 			
 		$this -> bindArray = array(
 			  0
-			, $userId
+			, $userNum
 			, $themeId
 			, $talk
-			, $talkType
-			, $imgSeqId
 			, $talkDate
 			, $userDeleteFlg
 			, date( 'YmdHis' )
 		);
 		
-		$talkSeqId = $this -> exec();
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqId:' . $talkSeqId );
+		$talkSeqNum = $this -> exec();
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqNum:' . $talkSeqNum );
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
-		return $talkSeqId;
+		return $talkSeqNum;
 		
 	}
 	

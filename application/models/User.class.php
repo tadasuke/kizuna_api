@@ -17,10 +17,10 @@ class User {
 	const CANCEL_FLG_TRUE  = '1';
 	
 	/**
-	 * ユーザID
+	 * ユーザNum
 	 * @var int
 	 */
-	private $userId = NULL;
+	private $userNum = NULL;
 	
 	/**
 	 * ユーザビーン
@@ -38,10 +38,10 @@ class User {
 	
 	/**
 	 * コンストラクタ
-	 * @param int $userId
+	 * @param int $userNum
 	 */
-	public function __construct( $userId ) {
-		$this -> userId = $userId;
+	public function __construct( $userNum ) {
+		$this -> userNum = $userNum;
 	}
 	
 	//--------------------------- private ---------------------------------
@@ -53,7 +53,7 @@ class User {
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
 		// ユーザパーソナルデータ取得
-		$userPersonalDataValueArray = DataClassFactory::getUserPersonalDataObj() -> getDataByUserId( $this -> userId );
+		$userPersonalDataValueArray = DataClassFactory::getUserPersonalDataObj() -> getDataByUserNum( $this -> userNum );
 		$name              = $userPersonalDataValueArray[0]['name'];
 		$gender            = $userPersonalDataValueArray[0]['gender'];
 		$birthday          = AK_Gadget::dateFormat( $userPersonalDataValueArray[0]['birthday'], 'Ymd'  );
@@ -66,7 +66,7 @@ class User {
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'telephoneNumber_2:' . $telephoneNumber_2 );
 		
 		$userBean = new UserBean();
-		$userBean -> setUserId( $this -> userId );
+		$userBean -> setUserNum( $this -> userNum );
 		$userBean -> setUserName( $name );
 		$userBean -> setGender( $gender );
 		$userBean -> setBirthday( $birthday );
@@ -186,24 +186,24 @@ class User {
 	/**
 	 * ユーザID取得
 	 * @param string $userKey
-	 * @return int $userId
+	 * @return int $userNum
 	 */
 	public static function getUserIdFromUserKey( $userKey ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userKey:' . $userKey );
 		
-		$userId = NULL;
+		$userNum = NULL;
 		
 		$userBasicDataValueArray = DataClassFactory::getUserBaslcDataObj() -> getDataByUserKey( $userKey );
 		if ( count( $userBasicDataValueArray ) > 0 ) {
-			$userId = $userBasicDataValueArray[0]['user_id'];
+			$userNum = $userBasicDataValueArray[0]['user_num'];
 		} else {
 			;
 		}
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
-		return $userId;
+		return $userNum;
 		
 	}
 	

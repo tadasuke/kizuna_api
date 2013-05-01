@@ -7,8 +7,8 @@ class Talk {
 	const TALK_RESULT_COMPLETE       = '0';
 	const TALK_RESULT_THEME_ID_ERROR = '1';
 	
-	const TALK_USER_DELTE_FLG_FALSE = '0';
-	const TALK_USER_DELTE_FLG_TRUE  = '1';
+	const TALK_USER_DELETE_FLG_FALSE = '0';
+	const TALK_USER_DELETE_FLG_TRUE  = '1';
 	
 	const COMMENT_RESULT_COMPLETE          = '0';
 	const COMMENT_RESULT_TALK_SEQ_ID_ERROR = '1';
@@ -17,7 +17,7 @@ class Talk {
 	const COMMENT_USER_DLETE_FLG_TRUE  = '1';
 	
 	// トークシーケンスID
-	public static $talkSeqId = NULL;
+	public static $newTalkSeqNum = NULL;
 	
 	// コメントシーケンスID
 	public static $commentSeqId = NULL;
@@ -167,25 +167,23 @@ class Talk {
 	
 	/**
 	 * トーク実行
-	 * @param int $userId
+	 * @param int $userNum
 	 * @param string $themeId
 	 * @param string $takl
-	 * @param string $talkType
 	 * @return string $result
 	 */
-	public static function execTalk( $userId, $themeId, $talk, $talkType ) {
+	public static function execTalk( $userNum, $themeId, $talk ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userId:'   . $userId );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:'  . $themeId );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk:'     . $talk );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkType:' . $talkType );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:' . $userNum );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:' . $themeId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk:'    . $talk );
 		
 		//------------
 		// チェック処理
 		//------------
-		$result = self::checkTalk( $themeId );
-		
+		$result = self::checkTalk( $themeId, $talk );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'result:' . $result );
 		if ( strcmp( $result, self::TALK_RESULT_COMPLETE ) != 0 ) {
 			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 			return $result;
@@ -194,11 +192,11 @@ class Talk {
 		}
 		
 		// 書き込み
-		$talkSeqId = DataClassFactory::getTalkDataObj() -> insert( $userId, $themeId, $talk, $talkType, NULL, date( 'YmdHis' ), self::TALK_USER_DELTE_FLG_FALSE );
-		self::$talkSeqId = $talkSeqId;
+		$talkSeqNum = DataClassFactory::getTalkDataObj() -> insert( $userNum, $themeId, $talk, date( 'YmdHis'), self::TALK_USER_DELETE_FLG_FALSE );
+		self::$newTalkSeqNum = $talkSeqNum;
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
-		return $result;
+		return self::TALK_RESULT_COMPLETE;
 		
 	}
 	
@@ -242,17 +240,20 @@ class Talk {
 	/**
 	 * トークチェック
 	 * @param string $themeId
+	 * @param string $talk
 	 * @return string $result
 	 */
-	private static function checkTalk( $themeId ) {
+	private static function checkTalk( $themeId, $talk ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:' . $themeId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk:'    . $talk );
 		
 		//---------------
 		// テーマIDチェック
 		//---------------
 		$themeMasterValueArray = DataClassFactory::getThemeMasterObj() -> getDataByThemeId( $themeId );
+		
 		if ( count( $themeMasterValueArray ) == 0 ) {
 			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'theme_id_error!!' );
 			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * ログインコントローラ
+ * @author tadasuke
+ */
 class LoginController extends KizunaBaseController {
 	
 	const LOGIN_COMPLETE = '0';
@@ -76,6 +80,19 @@ class LoginController extends KizunaBaseController {
 	}
 	
 	
+	/**
+	 * ログアウト
+	 */
+	public function logoutAction() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		$this -> deleteLoginCookie();
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
+	
 	//------------------------------------ protected ------------------------------------
 	
 	/**
@@ -111,6 +128,19 @@ class LoginController extends KizunaBaseController {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		
+	}
+	
+	/**
+	 * ログインクッキー削除
+	 */
+	private function deleteLoginCookie() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		$keyName   = AK_Ini::getConfig( 'system_config', 'cookie_config', 'login_key_name' );
+		setcookie( $keyName, '', time() - 3600, '/' );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 	}
 	
 	

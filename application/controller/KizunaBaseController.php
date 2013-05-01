@@ -10,7 +10,7 @@ class KizunaBaseController extends AK_BaseController {
 	 * プレイユーザID
 	 * @var int
 	 */
-	protected $playerUserId = NULL;
+	protected $playerUserNum = NULL;
 	
 	/**
 	 * プレイユーザキー
@@ -33,12 +33,20 @@ class KizunaBaseController extends AK_BaseController {
 		//-----------
 		// DB接続設定
 		//-----------
+		// TRUN
 		$databaseName = AK_Ini::getConfig( 'db_config', 'database_name' );
 		$host         = AK_Ini::getConfig( 'db_config', 'host' );
 		$user         = AK_Ini::getConfig( 'db_config', 'user' );
 		$password     = AK_Ini::getConfig( 'db_config', 'password' );
 		$akDbConfig = new AK_DbConfig( $databaseName, $host, $user, $password );
 		AK_DaoFactory::addDbConfig( $akDbConfig );
+		// MASTER
+		$databaseName = AK_Ini::getConfig( 'master_db_config', 'database_name' );
+		$host         = AK_Ini::getConfig( 'master_db_config', 'host' );
+		$user         = AK_Ini::getConfig( 'master_db_config', 'user' );
+		$password     = AK_Ini::getConfig( 'master_db_config', 'password' );
+		$akDbConfig = new AK_DbConfig( $databaseName, $host, $user, $password );
+		AK_DaoFactory::addDbConfig( $akDbConfig, MASTER_DB_IDEMTIFICATION_NAME );
 		
 		//------------------
 		// ログイン済みチェック
@@ -155,7 +163,7 @@ class KizunaBaseController extends AK_BaseController {
 		}
 		
 		// ユーザデータ設定
-		$this -> playerUserId  = $valueArray[0]['user_id'];
+		$this -> playerUserNum  = $valueArray[0]['user_num'];
 		$this -> playerUserKey = $userKey;
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );

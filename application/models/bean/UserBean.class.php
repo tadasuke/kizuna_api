@@ -3,15 +3,15 @@
 class UserBean {
 	
 	/**
-	 * ユーザID
+	 * ユーザNum
 	 * @var int
 	 */
-	private $userId = NULL;
-	public function setUserId( $userId ) {
-		$this -> userId = $userId;
+	private $userNum = NULL;
+	public function setUserNum( $userNum ) {
+		$this -> userNum = $userNum;
 	}
-	public function getUserId() {
-		return $this -> userId;
+	public function getUserNum() {
+		return $this -> userNum;
 	}
 	
 	/**

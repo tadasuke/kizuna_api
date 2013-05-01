@@ -72,7 +72,7 @@ abstract class DataClassFactory {
 	public static function getThemeMasterObj() {
 		if ( is_null( self::$themeMasterObj ) === TRUE ) {
 			require_once 'ThemeMaster.class.php';
-			self::$themeMasterObj = new ThemeMaster();
+			self::$themeMasterObj = new ThemeMaster( MASTER_DB_IDEMTIFICATION_NAME );
 		} else {
 			;
 		}

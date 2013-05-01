@@ -4,6 +4,40 @@ require_once 'application/models/Talk.class.php';
 
 class TalkController extends KizunaBaseController {
 	
+	
+	/**
+	 * トーク実行
+	 */
+	public function execTalkAction() {
+	
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		$themeId = $this -> getParam( 'theme_id' );
+		$talk    = $this -> getParam( 'talk' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:'  . $themeId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk:'     . $talk );
+		
+		$talkSeqId = '';
+	
+		// 書き込み実行
+		$result = Talk::execTalk( $this -> playerUserNum, $themeId, $talk );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'result:' . $result );
+	
+		// 書き込み成功時には書き込みシーケンスIDを取得
+		$talkSeqId = (strcmp( $result, Talk::TALK_RESULT_COMPLETE ) == 0) ? Talk::$talkSeqId : $talkSeqId;
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqId:' . $talkSeqId );
+	
+		// レスポンス設定
+		$responseArray = array(
+				'result'      => $result
+				, 'talk_seq_id' => $talkSeqId
+		);
+		$this -> setResponseParam( $responseArray );
+	
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+	
+	}
+	
+	
 	/**
 	 * トークデータ取得
 	 */
@@ -84,41 +118,6 @@ class TalkController extends KizunaBaseController {
 		}
 		
 		$this -> setResponseParam( array( 'talk_data' => $talkDataArray ) );
-		
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
-		
-	}
-	
-	
-	/**
-	 * トーク実行
-	 */
-	public function talkAction() {
-		
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
-		$themeId = $this -> getParam( 'theme_id' );
-		$talk    = $this -> getParam( 'talk' );
-		$talkType = $this -> getParam( 'talk_type' );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:'  . $themeId );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk:'     . $talk );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkType:' . $talkType );
-		
-		$talkSeqId = '';
-		
-		// 書き込み実行
-		$result = Talk::execTalk( $this -> playerUserId, $themeId, $talk, $talkType );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'result:' . $result );
-		
-		// 書き込み成功時には書き込みシーケンスIDを取得
-		$talkSeqId = (strcmp( $result, Talk::TALK_RESULT_COMPLETE ) == 0) ? Talk::$talkSeqId : $talkSeqId;
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqId:' . $talkSeqId );
-		
-		// レスポンス設定
-		$responseArray = array(
-			  'result'      => $result
-			, 'talk_seq_id' => $talkSeqId
-		);
-		$this -> setResponseParam( $responseArray );
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		
