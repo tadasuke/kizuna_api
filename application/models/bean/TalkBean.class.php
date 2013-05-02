@@ -3,27 +3,27 @@
 class TalkBean {
 	
 	/**
-	 * トークシーケンスID
+	 * トークシーケンスNUM
 	 * @var int
 	 */
-	private $talkSeqId = NULL;
-	public function setTaklSeqId( $talkSeqId ) {
-		$this -> talkSeqId = $talkSeqId;
+	private $talkSeqNum = NULL;
+	public function setTaklSeqNum( $talkSeqNum ) {
+		$this -> talkSeqNum = $talkSeqNum;
 	}
-	public function getTalkSeqId() {
-		return $this -> talkSeqId;
+	public function getTalkSeqNum() {
+		return $this -> talkSeqNum;
 	}
 	
 	/**
 	 * トークユーザID
 	 * @var int
 	 */
-	private $talkUserId = NULL;
-	public function setTalkUserId( $talkUserId ) {
-		$this -> talkUserId = $talkUserId;
+	private $talkUserNum = NULL;
+	public function setTalkUserNum( $talkUserNum ) {
+		$this -> talkUserNum = $talkUserNum;
 	}
-	public function getTalkUserId() {
-		return $this -> talkUserId;
+	public function getTalkUserNum() {
+		return $this -> talkUserNum;
 	}
 	
 	/**
@@ -48,18 +48,6 @@ class TalkBean {
 	}
 	public function getTalk() {
 		return $this -> talk;
-	}
-	
-	/**
-	 * トークタイプ
-	 * @var string
-	 */
-	private $talkType = NULL;
-	public function setTalkType( $talkType ) {
-		$this -> talkType = $talkType;
-	}
-	public function getTalkType() {
-		return $this -> talkType;
 	}
 	
 	/**

@@ -8,24 +8,23 @@ class TalkData extends AK_Db{
 	 * @param int $userId
 	 * @param string $themeId
 	 * @param int $getRecordCount
-	 * @param int $startSeqId
+	 * @param int $startSeqNum
 	 */
-	public function getData( $getRecordCount = NULL, $seqId = NULL, $userId = NULL, $themeId = NULL, $startSeqId = NULL, $userDeleteFlg = Talk::TALK_USER_DELTE_FLG_FALSE ) {
+	public function getData( $getRecordCount = NULL, $seqNum = NULL, $userNum = NULL, $themeId = NULL, $startSeqNum = NULL, $userDeleteFlg = NULL ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'seqId:'          . $seqId );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userId:'         . $userId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'seqNum:'         . $seqNum );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:'        . $userNum );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:'        . $themeId );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'getRecordCount:' . $getRecordCount );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'startSeqId:'     . $startSeqId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'startSeqNum:'    . $startSeqNum );
 		
 		$this -> sqlcmd =
 			"SELECT "
-				. "  seq_id "
-				. ", user_id "
+				. "  seq_num "
+				. ", user_num "
 				. ", theme_id "
 				. ", talk "
-				. ", talk_type "
 				. ", talk_date "
 				. ", user_delete_flg "
 			. "FROM talk_data "
@@ -36,16 +35,16 @@ class TalkData extends AK_Db{
 			DELETE_FLG_FALSE
 		);
 		
-		if ( is_null( $seqId ) === FALSE ) {
-			$this -> sqlcmd .= "AND seq_id = ? ";
-			$this -> bindArray[] = $seqId;
+		if ( is_null( $seqNum ) === FALSE ) {
+			$this -> sqlcmd .= "AND seq_num = ? ";
+			$this -> bindArray[] = $seqNum;
 		} else {
 			;
 		}
 		
-		if ( is_null( $userId ) === FALSE ) {
-			$this -> sqlcmd .= "AND user_id = ? ";
-			$this -> bindArray[] = $userId;
+		if ( is_null( $userNum ) === FALSE ) {
+			$this -> sqlcmd .= "AND user_num = ? ";
+			$this -> bindArray[] = $userNum;
 		} else {
 			;
 		}
@@ -57,9 +56,9 @@ class TalkData extends AK_Db{
 			;
 		}
 		
-		if ( is_null( $startSeqId ) === FALSE ) {
-			$this -> sqlcmd .= "AND seq_id >= ? ";
-			$this -> bindArray[] = $startSeqId;
+		if ( is_null( $startSeqNum ) === FALSE ) {
+			$this -> sqlcmd .= "AND seq_num >= ? ";
+			$this -> bindArray[] = $startSeqNum;
 		} else {
 			;
 		}
@@ -71,7 +70,7 @@ class TalkData extends AK_Db{
 			;
 		}
 		
-		$this -> sqlcmd .= "ORDER BY seq_id DESC ";
+		$this -> sqlcmd .= "ORDER BY seq_num DESC ";
 		
 		if ( is_null( $getRecordCount ) === FALSE ) {
 			$this -> sqlcmd .= "LIMIT 0, " . $getRecordCount . " ";
