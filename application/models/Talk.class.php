@@ -235,6 +235,34 @@ class Talk {
 		
 	}
 	
+	
+	/**
+	 * テーマ取得
+	 * @param string $themeId
+	 * @return array
+	 */
+	public static function getTheme( $themeId = NULL ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:' . $themeId );
+		
+		$themeArray = array();
+		
+		$valueArray = DataClassFactory::getThemeMasterObj() -> getDataByThemeId( $themeId );
+		
+		foreach ( $valueArray as $data ) {
+			$themeArray[] = array(
+				  'theme_id'   => $data['theme_id']
+				, 'theme_name' => $data['theme_name']
+				, 'templete'   => $data['template']
+			);
+		}
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		return $themeArray;
+		
+	}
+	
 	//----------------------------------- priavte static ------------------------------------
 	
 	/**

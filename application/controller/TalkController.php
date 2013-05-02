@@ -71,6 +71,34 @@ class TalkController extends KizunaBaseController {
 	
 	
 	/**
+	 * 全テーマ取得
+	 */
+	public function getThemeAction() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		$themeId = $this -> getParam( 'theme_id' ) ?: NULL;
+		
+		$themeArray = Talk::getTheme( $themeId );
+		
+		$responseArray = array();
+		foreach ( $themeArray as $data ) {
+			$responseArray[] = array(
+				  'theme_id'   => $data['theme_id']
+				, 'theme_name' => $data['theme_name']
+				, 'template'   => $data['template'] ?: ''
+			);
+		}
+		
+		$this -> setResponseParam( array( 'theme_data' => $responseArray ) );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
+	
+	
+	
+	
+	
+	/**
 	 * コメント実行
 	 */
 	public function commentAction() {
