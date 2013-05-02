@@ -98,14 +98,35 @@ class TalkController extends KizunaBaseController {
 		
 		$talkDataArray = array();
 		foreach ( $talkBeanArray as $talkBean ) {
-			$talkDataArray[] = array(
-				  'talk_seq_num'  => $talkBean -> getTalkSeqNum()
-				, 'talk'          => $talkBean -> getTalk()
-				, 'theme_id'      => $talkBean -> getThemeId()
+			
+			// コメントビーンを設定
+			$talkBean -> setCommentBeanArray();
+			
+			// コメント配列を作成
+			$commentBeanArray = $talkBean -> getCommentBeanArray();
+			$commentArray = array();
+			foreach ( $commentBeanArray as $commentBean ) {
+				$commentArray[] = array(
+					  'comment_seq_num'   => $commentBean -> getCommentSeqNum()
+					, 'comment'           => $commentBean -> getComment()
+					, 'comment_user_name' => User::getUserNameByUserNum( $commentBean -> getCommentUserNum() )
+					, 'comment_user_key'  => User::getUserKeyByUserNum( $commentBean -> getCommentUserNum() )
+					, 'comment_date'      => AK_Gadget::dateFormat( $commentBean -> getCommentDate() )
+				);
+			}
+			
+			// トーク配列を作成
+			$talkArray = array(
+				  'talk_seq_num'   => $talkBean -> getTalkSeqNum()
+				, 'talk'           => $talkBean -> getTalk()
+				, 'theme_id'       => $talkBean -> getThemeId()
 				, 'talk_user_name' => User::getUserNameByUserNum( $talkBean -> getTalkUserNum() )
-				, 'talk_user_key' => User::getUserKeyByUserNum( $talkBean -> getTalkUserNum() )
-				, 'talk_date'     => AK_Gadget::dateFormat( $talkBean -> getTalkDate() )
+				, 'talk_user_key'  => User::getUserKeyByUserNum( $talkBean -> getTalkUserNum() )
+				, 'talk_date'      => AK_Gadget::dateFormat( $talkBean -> getTalkDate() )
+				, 'comment_data'   => $commentArray
 			);
+			
+			$talkDataArray[] = $talkArray;
 		}
 		
 		$this -> setResponseParam( array( 'talk_data' => $talkDataArray ) );

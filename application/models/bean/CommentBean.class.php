@@ -3,44 +3,63 @@
 class CommentBean {
 	
 	/**
-	 * コメントシーケンスID
+	 * コメントシーケンスNUM
 	 * @var int
 	 */
 	private $commentSeqId = NULL;
-	public function setCommentSeqId( $commentSeqId ) {
-		$this -> commentSeqId = $commentSeqId;
+	public function setCommentSeqNum( $commentSeqNum ) {
+		$this -> commentSeqNum = $commentSeqNum;
 	}
-	public function getCommentSeq() {
-		return $this -> commentSeqId;
+	public function getCommentSeqNum() {
+		return $this -> commentSeqNum;
 	}
 	
 	/**
-	 * コメントをしたトークシーケンスID
+	 * コメントをしたトークシーケンスNUM
 	 * @var int
 	 */
-	private $talkSeqId = NULL;
-	public function setTalkSeqId( $talkSeqId ) {
-		$this -> talkSeqId = $talkSeqId;
+	private $talkSeqNum = NULL;
+	public function setTalkSeqNum( $talkSeqNum ) {
+		$this -> talkSeqNum = $talkSeqNum;
 	}
-	public function getTalkSeqId() {
-		return $this -> talkSeqId;
+	public function getTalkSeqNum() {
+		return $this -> talkSeqNum;
 	}
 	
 	/**
-	 * コメントユーザID
+	 * コメントユーザNUM
 	 * @var string
 	 */
-	private $commentUserId = NULL;
-	public function setCommentUserId( $commentUserId ) {
-		$this -> commentUserId = $commentUserId;
+	private $commentUserNum = NULL;
+	public function setCommentUserNum( $commentUserNum ) {
+		$this -> commentUserNum = $commentUserNum;
 	}
-	public function getCommentUserId() {
-		return $this -> commentUserId;
+	public function getCommentUserNum() {
+		return $this -> commentUserNum;
 	}
 	
+	/**
+	 * コメント
+	 * @var string
+	 */
 	private $comment = NULL;
+	public function setComment( $comment ) {
+		$this -> comment = $comment;
+	}
+	public function getComment() {
+		return $this -> comment;
+	}
+	
+	/**
+	 * コメント日時
+	 * @var string
+	 */
 	private $commentDate = NULL;
-	
-	
+	public function setCommentDate( $commentDate ) {
+		$this -> commentDate = $commentDate;
+	}
+	public function getCommentDate() {
+		return $this -> commentDate;
+	}
 	
 }

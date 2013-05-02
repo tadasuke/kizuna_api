@@ -1,5 +1,7 @@
 <?php
 
+require_once 'CommentBean.class.php';
+
 class TalkBean {
 	
 	/**
@@ -62,5 +64,44 @@ class TalkBean {
 		return $this -> talkDate;
 	}
 	
+	/**
+	 * コメントビーン配列
+	 * @var array[CommentBean]
+	 */
+	private $commentBeanArray = array();
+	public function setCommentBeanArray() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		// トークシーケンスNUMが未設定の場合は何もしない
+		if ( is_null( $this -> talkSeqNum ) === TRUE ) {
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'no_talk_seq_num' );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+			return;
+		} else {
+			;
+		}
+		
+		// コメントデータを取得
+		$commentDataValueArray = DataClassFactory::getCommentDataObj() -> getDataByTalkSeqNum( $this -> talkSeqNum, Talk::COMMENT_USER_DLETE_FLG_FALSE );
+		
+		$commentBeanArray = array();
+		foreach ( $commentDataValueArray as $data ) {
+			$commentBean = new CommentBean();
+			$commentBean -> setCommentSeqNum( $data['comment_seq_num'] );
+			$commentBean -> setTalkSeqNum( $data['talk_seq_num'] );
+			$commentBean -> setCommentUserNum( $data['user_num'] );
+			$commentBean -> setComment( $data['comment'] );
+			$commentBean -> setCommentDate( $data['comment_date'] );
+			$commentBeanArray[] = $commentBean;
+		}
+		
+		$this -> commentBeanArray = $commentBeanArray;
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+	}
+	public function getCommentBeanArray() {
+		return $this -> commentBeanArray;
+	}
 	
 }
