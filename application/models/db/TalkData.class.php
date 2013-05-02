@@ -70,7 +70,7 @@ class TalkData extends AK_Db{
 			;
 		}
 		
-		$this -> sqlcmd .= "ORDER BY seq_num DESC ";
+		$this -> sqlcmd .= "ORDER BY seq_num ASC ";
 		
 		if ( is_null( $getRecordCount ) === FALSE ) {
 			$this -> sqlcmd .= "LIMIT 0, " . $getRecordCount . " ";

@@ -195,7 +195,7 @@ class User {
 	 * @param string $userKey
 	 * @return int $userNum
 	 */
-	public static function getUserNumFromUserKey( $userKey ) {
+	public static function getUserNumByUserKey( $userKey ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userKey:' . $userKey );

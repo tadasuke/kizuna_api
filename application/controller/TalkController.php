@@ -49,7 +49,51 @@ class TalkController extends KizunaBaseController {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
+		$themeId     = $this -> getParam( 'theme_id' );
+		$talkUserKey = $this -> getParam( 'talk_user_key' );
+		$talkSeqNum  = $this -> getParam( 'talk_seq_num' );
+		$startSeqNum = $this -> getParam( 'start_seq_num' );
+		$dataCount   = $this -> getParam( 'data_count' );
+		
 		$talkObj = Talk::getInstance();
+		
+		//------------
+		// 検索条件設定
+		//------------
+		// テーマID
+		if ( strlen( $themeId ) > 0 ) {
+			$talkObj -> setSearchThemeId( $themeId );
+		} else {
+			;
+		}
+		// トークユーザNUM
+		if ( strlen( $talkUserKey ) > 0 ) {
+			$talkUserNum = User::getUserNumByUserKey( $talkUserKey );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkUserNum:' . $talkUserNum );
+			$talkObj -> setSearchUserNum( $talkUserNum );
+		} else {
+			;
+		}
+		// トークシーケンスNUM
+		if ( strlen( $talkSeqNum ) > 0 ) {
+			$talkObj -> setSearchTalkSeqNum( $talkSeqNum );
+		} else {
+			;
+		}
+		// 検索開始シーケンスNUM
+		if ( strlen( $startSeqNum ) > 0 ) {
+			$talkObj -> setStartTalkSeqNum( $startSeqNum ); 
+		} else {
+			;
+		}
+		// 獲得データ数
+		if ( strlen( $dataCount ) > 0 ) {
+			$talkObj -> setGetRecordCount( $dataCount );
+		} else {
+			;
+		}
+		
+		// トークデータ取得
 		$talkBeanArray = $talkObj -> getTalkBeanArray();
 		
 		$talkDataArray = array();
