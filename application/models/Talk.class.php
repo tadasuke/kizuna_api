@@ -20,7 +20,7 @@ class Talk {
 	public static $newTalkSeqNum = NULL;
 	
 	// コメントシーケンスID
-	public static $commentSeqId = NULL;
+	public static $newCommentSeqNum = NULL;
 	
 	//---------------------------
 	// シングルトンにするためのモロモロ
@@ -202,22 +202,23 @@ class Talk {
 	
 	/**
 	 * コメント実行
-	 * @param int $userId
-	 * @param int $talkSeqId
+	 * @param int $userNUm
+	 * @param int $talkSeqNum
 	 * @param string $comment
 	 * @return string $result
 	 */
-	public static function execComment( $userId, $talkSeqId, $comment ) {
+	public static function execComment( $userNUm, $talkSeqNum, $comment ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userId:'    . $userId );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqId:' . $talkSeqId );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'comment:'   . $comment );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNUm:'    . $userNUm );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqNum:' . $talkSeqNum );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'comment:'    . $comment );
 		
 		//------------
 		// チェック処理
 		//------------
-		$result = self::checkComment( $talkSeqId );
+		$result = self::checkComment( $talkSeqNum );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'result:' . $result );
 		if ( strcmp( $result, self::TALK_RESULT_COMPLETE ) != 0 ) {
 			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 			return $result;
@@ -226,8 +227,8 @@ class Talk {
 		}
 		
 		// コメント書き込み
-		$commentSeqId = DataClassFactory::getCommentDataObj() -> insert( $talkSeqId, $userId, $comment, date( 'YmdHis' ), self::COMMENT_USER_DLETE_FLG_FALSE );
-		self::$commentSeqId = $commentSeqId;
+		$commentSeqNum = DataClassFactory::getCommentDataObj() -> insert( $talkSeqNum, $userNUm, $comment, date( 'YmdHis' ), self::COMMENT_USER_DLETE_FLG_FALSE );
+		self::$newCommentSeqNum = $commentSeqNum;
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		
@@ -298,17 +299,17 @@ class Talk {
 	
 	/**
 	 * コメントチェック
-	 * @param int $talkSeqId
+	 * @param int $talkSeqNum
 	 */
-	private static function checkComment( $talkSeqId ) {
+	private static function checkComment( $talkSeqNum ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqId:' . $talkSeqId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqNum:' . $talkSeqNum );
 		
 		//-----------------------
 		// トークシーケンスIDチェック
 		//-----------------------
-		$talkDataValueArray = DataClassFactory::getTalkDataObj() -> getData( NULL, $talkSeqId );
+		$talkDataValueArray = DataClassFactory::getTalkDataObj() -> getData( NULL, $talkSeqNum );
 		if ( count( $talkDataValueArray ) == 0 ) {
 			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk_seq_id_error!!' );
 			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );

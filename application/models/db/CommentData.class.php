@@ -5,17 +5,18 @@ class CommentData extends AK_Db{
 	
 	/**
 	 * インサート
-	 * @param int $talkSeqId
-	 * @param int $userId
+	 * @param int $talkSeqNum
+	 * @param int $userNum
 	 * @param string $comment
 	 * @param string $commentDate
 	 * @param string $userDeleteFlg
+	 * @return int $commentSeqNum
 	 */
-	public function insert( $talkSeqId, $userId, $comment, $commentDate, $userDeleteFlg ) {
+	public function insert( $talkSeqNum, $userNum, $comment, $commentDate, $userDeleteFlg ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqId:'     . $talkSeqId );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userId:'        . $userId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqNum:'    . $talkSeqNum );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:'       . $userNum );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'comment:'       . $comment );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'commentDate:'   . $commentDate );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userDeleteFlg:' . $userDeleteFlg );
@@ -23,8 +24,9 @@ class CommentData extends AK_Db{
 		$this -> sqlcmd =
 			"INSERT INTO comment_data "
 			. "( "
-				. "  talk_seq_id "
-				. ", user_id "
+				. "  comment_seq_num "
+				. ", talk_seq_num "
+				. ", user_num "
 				. ", comment "
 				. ", comment_date "
 				. ", user_delete_flg "
@@ -36,23 +38,25 @@ class CommentData extends AK_Db{
 				. ", ? "
 				. ", ? "
 				. ", ? "
+				. ", ? "
 			. ") "
 			;
 			
 		$this -> bindArray = array(
-			  $talkSeqId
-			, $userId
+			  0
+			, $talkSeqNum
+			, $userNum
 			, $comment
 			, $commentDate
 			, $userDeleteFlg
 			, date( 'YmdHis' )
 		);
 		
-		$commentSeqId = $this -> exec();
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'commentSeqId:' . $commentSeqId );
+		$commentSeqNum = $this -> exec();
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'commentSeqNum:' . $commentSeqNum );
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
-		return $commentSeqId;
+		return $commentSeqNum;
 		
 	}
 	

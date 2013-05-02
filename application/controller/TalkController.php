@@ -139,34 +139,34 @@ class TalkController extends KizunaBaseController {
 	}
 	
 	
-	
-	
-	
 	/**
 	 * コメント実行
 	 */
-	public function commentAction() {
+	public function execCommentAction() {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
-		$talkSeqId = $this -> getParam( 'talk_seq_id' );
-		$comment   = $this -> getParam( 'comment' );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talkSeqId:' . $talkSeqId );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'comment:'   . $comment );
+		$talkSeqNum = $this -> getParam( 'talk_seq_num' );
+		$comment    = $this -> getParam( 'comment' );
 		
-		$commentSeqId = '';
+		$commentSeqNum = '';
 		
 		// コメント書き込み実行
-		$result = Talk::execComment( $this -> playerUserId, $talkSeqId, $comment );
+		$result = Talk::execComment( $this -> playerUserNum, $talkSeqNum, $comment );
 		
-		// コメント書き込み成功時にはコメントシーケンスIDを取得
-		$commentSeqId = (strcmp( $result, Talk::COMMENT_RESULT_COMPLETE ) == 0 ) ? Talk::$commentSeqId : $commentSeqId;
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'commentSeqId:' . $commentSeqId );
+		// コメント書き込み成功時にはコメントシーケンNUMを取得
+		if ( strcasecmp( $result, talk::COMMENT_RESULT_COMPLETE ) == 0 ) {
+			$commentSeqNum = Talk::$newCommentSeqNum;
+		} else {
+			;
+		}
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'commentSeqNum:' . $commentSeqNum );
 		
 		// レスポンス設定
 		$responseArray = array(
 			  'result'         => $result
-			, 'comment_seq_id' => $commentSeqId
+			, 'comment_seq_num' => $commentSeqNum
 		);
 		$this -> setResponseParam( $responseArray );
 		
