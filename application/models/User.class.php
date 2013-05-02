@@ -191,11 +191,11 @@ class User {
 	
 	
 	/**
-	 * ユーザID取得
+	 * ユーザNUM取得
 	 * @param string $userKey
 	 * @return int $userNum
 	 */
-	public static function getUserIdFromUserKey( $userKey ) {
+	public static function getUserNumFromUserKey( $userKey ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userKey:' . $userKey );
@@ -217,19 +217,19 @@ class User {
 	
 	/**
 	 * ユーザーキー取得
-	 * @param int $userId
+	 * @param int $userNum
 	 * @return string $userKey
 	 */
-	public static function getUserKeyByUserId( $userId ) {
+	public static function getUserKeyByUserNum( $userNum ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userId:' . $userId );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:' . $userNum );
 		
 		$userKey = NULL;
 		
-		$valueArray = DataClassFactory::getUserBaslcDataObj() -> getDataByUserId( $userId );
+		$valueArray = DataClassFactory::getUserBaslcDataObj() -> getDataByUserNum( $userNum );
 		if ( count( $valueArray ) > 0 ) {
-			$userKey = $valueArray[0]['user_id'];
+			$userKey = $valueArray[0]['user_key'];
 		} else {
 			;
 		}
@@ -237,6 +237,31 @@ class User {
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userKey:' . $userKey );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		return $userKey;
+		
+	}
+	
+	
+	/**
+	 * ユーザ名取得
+	 * ユーザNUMを元にユーザ名を取得
+	 * @param int $userNum
+	 */
+	public static function getUserNameByUserNum( $userNum ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:' . $userNum );
+		
+		$userName = '';
+		
+		$valueArray = DataClassFactory::getUserPersonalDataObj() -> getDataByUserNum( $userNum );
+		if ( count( $valueArray ) > 0 ) {
+			$userName = $valueArray[0]['name'];
+		} else {
+			;
+		}
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		return $userName;
 		
 	}
 	

@@ -62,10 +62,12 @@ class UserPersonalData extends AK_Db {
 				. ", profile_img_seq_id "
 			. "FROM user_personal_data "
 			. "WHERE user_num = ? "
+			. "AND delete_flg = ? "
 			;
 			
 		$this -> bindArray = array(
-			$userNum
+			  $userNum
+			, DELETE_FLG_FALSE
 		);
 		
 		$this -> select();

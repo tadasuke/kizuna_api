@@ -137,7 +137,7 @@ class UserBasicData extends AK_Db {
 	 * @param int $userNum
 	 * @return array
 	 */
-	public function getDataByUserId( $userNum ) {
+	public function getDataByUserNum( $userNum ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:' . $userNum );
@@ -152,10 +152,14 @@ class UserBasicData extends AK_Db {
 				. ", entry_date "
 				. ", cancel_flg "
 			. "FROM user_basic_data "
-			. "WHERE user_id = ? "
+			. "WHERE user_num = ? "
+			. "AND delete_flg = ? "
 			;
 		
-		$this -> bindArray = array( $userNum );
+		$this -> bindArray = array(
+				  $userNum
+				, DELETE_FLG_FALSE
+		);
 		
 		$this -> select();
 		
