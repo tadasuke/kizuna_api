@@ -54,26 +54,33 @@ class User {
 		
 		// ユーザパーソナルデータ取得
 		$userPersonalDataValueArray = DataClassFactory::getUserPersonalDataObj() -> getDataByUserNum( $this -> userNum );
-		$name              = $userPersonalDataValueArray[0]['name'];
-		$gender            = $userPersonalDataValueArray[0]['gender'];
-		$birthday          = AK_Gadget::dateFormat( $userPersonalDataValueArray[0]['birthday'], 'Ymd'  );
-		$telephoneNumber_1 = $userPersonalDataValueArray[0]['telephone_number_1'];
-		$telephoneNumber_2 = $userPersonalDataValueArray[0]['telephone_number_2'];
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'name:'              . $name );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'gender:'            . $gender );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'birthday:'          . $birthday );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'telephoneNumber_1:' . $telephoneNumber_1 );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'telephoneNumber_2:' . $telephoneNumber_2 );
 		
-		$userBean = new UserBean();
-		$userBean -> setUserNum( $this -> userNum );
-		$userBean -> setUserName( $name );
-		$userBean -> setGender( $gender );
-		$userBean -> setBirthday( $birthday );
-		$userBean -> setTelephoneNumber1( $telephoneNumber_1 );
-		$userBean -> setTelephoneNumber2( $telephoneNumber_2 );
-		
-		$this -> userBean = $userBean;
+		// データが取得できた場合
+		if ( count( $userPersonalDataValueArray ) > 0 ) {
+			$name              = $userPersonalDataValueArray[0]['name'];
+			$gender            = $userPersonalDataValueArray[0]['gender'];
+			$birthday          = AK_Gadget::dateFormat( $userPersonalDataValueArray[0]['birthday'], 'Ymd'  );
+			$telephoneNumber_1 = $userPersonalDataValueArray[0]['telephone_number_1'];
+			$telephoneNumber_2 = $userPersonalDataValueArray[0]['telephone_number_2'];
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'name:'              . $name );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'gender:'            . $gender );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'birthday:'          . $birthday );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'telephoneNumber_1:' . $telephoneNumber_1 );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'telephoneNumber_2:' . $telephoneNumber_2 );
+			
+			$userBean = new UserBean();
+			$userBean -> setUserNum( $this -> userNum );
+			$userBean -> setUserName( $name );
+			$userBean -> setGender( $gender );
+			$userBean -> setBirthday( $birthday );
+			$userBean -> setTelephoneNumber1( $telephoneNumber_1 );
+			$userBean -> setTelephoneNumber2( $telephoneNumber_2 );
+			
+			$this -> userBean = $userBean;
+			
+		} else {
+			;
+		}
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		
