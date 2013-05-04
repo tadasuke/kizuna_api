@@ -31,4 +31,27 @@ class Img {
 		
 	}
 	
+	
+	/**
+	 * 画像取得
+	 * @param string $imgKey
+	 */
+	public static function getImgByImgKey( $imgKey ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'imgKey:' . $imgKey );
+		
+		$img = NULL;
+		
+		$valueArray = DataClassFactory::getImgDataObj() -> getDataByImgKey( $imgKey );
+		if ( count( $valueArray ) > 0 ) {
+			$img = $valueArray[0]['img'];
+		} else {
+			;
+		}
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		return $img;
+		
+	}
 }

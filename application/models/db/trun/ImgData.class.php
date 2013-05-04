@@ -44,4 +44,36 @@ class ImgData extends AK_Db{
 		
 	}
 	
+	
+	/**
+	 * データ取得
+	 * @param string $imgKey
+	 */
+	public function getDataByImgKey( $imgKey ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'imgKey:' . $imgKey );
+		
+		$this -> sqlcmd =
+			"SELECT "
+				. "  img_seq_num "
+				. ", img_key "
+				. ", img "
+			. "FROM img_data "
+			. "WHERE img_key = ? "
+			. "AND delete_flg = ? "
+			;
+			
+		$this -> bindArray = array(
+			  $imgKey
+			, DELETE_FLG_FALSE
+		);
+		
+		$this -> select();
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		return $this -> valueArray;
+		
+	}
+	
 }

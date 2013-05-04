@@ -51,4 +51,22 @@ class ImgController extends KizunaBaseController {
 		
 	}
 	
+	
+	/**
+	 * 画像取得
+	 */
+	public function getImgAction() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		$imgKey = $this -> getParam( 'img_key' );
+		
+		$img = Img::getImgByImgKey( $imgKey );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		$this -> setResponseType( self::RESPONSE_TYPE_IMG );
+		$this -> setResponseParam( array( $img ) );
+		
+	}
+	
 }
