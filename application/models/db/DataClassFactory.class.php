@@ -65,6 +65,23 @@ abstract class DataClassFactory {
 		return self::$commentDataObj;
 	}
 	
+	
+	/**
+	 * 画像データ
+	 * @var ImgData
+	 */
+	private static $imgDataObj = NULL;
+	public static function getImgDataObj() {
+		if ( is_null( self::$imgDataObj ) === TRUE ) {
+			require_once self::DEFAULT_TRUN_DIR . 'ImgData.class.php';
+			self::$imgDataObj = new ImgData();
+		} else {
+			;
+		}
+		return self::$imgDataObj;
+	}
+	
+	
 	//------------------------- マスター系 ----------------------------------
 	
 	/**
