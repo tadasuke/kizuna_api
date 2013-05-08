@@ -29,7 +29,7 @@ class ImgController extends KizunaBaseController {
 		$img = file_get_contents( $tmpName );
 		
 		// アップロード
-		$result = Img::uploadImg( $img );
+		$result = Img::uploadImg( $img, $name, $type, $size );
 		
 		// アップロードが成功した場合
 		if ( strcmp( $result, Img::UPLOAD_IMG_COMPLETE ) == 0 ) {
@@ -61,11 +61,13 @@ class ImgController extends KizunaBaseController {
 		
 		$imgKey = $this -> getParam( 'img_key' );
 		
-		$img = Img::getImgByImgKey( $imgKey );
+		// 画像ビーン取得
+		$imgBean = Img::getImgByImgKey( $imgKey );
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
-		$this -> setResponseType( self::RESPONSE_TYPE_IMG );
-		$this -> setResponseParam( array( $img ) );
+		$this -> setContentType( 'Content-type: ' . $imgBean -> getImgType() );
+		$this -> setResponseType( self::RESPONSE_TYPE_DATA );
+		$this -> setResponseParam( array( $imgBean -> getImg() ) );
 		
 	}
 	

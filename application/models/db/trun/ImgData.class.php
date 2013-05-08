@@ -7,12 +7,18 @@ class ImgData extends AK_Db{
 	 * インサート
 	 * @param string $imgKey
 	 * @param string $img
+	 * @param string $imgFileName
+	 * @param string $imgType
+	 * @param int $imgSize
 	 * @return int $imeSeqNum
 	 */
-	public function insert( $imgKey, $img ) {
+	public function insert( $imgKey, $img, $imgFileName, $imgType, $imgSize ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'imgKey:' . $imgKey );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'imgKey:'      . $imgKey );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'imgFileName:' . $imgFileName );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'imgType:'     . $imgType );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'imgSize:'     . $imgSize );
 		
 		$this -> sqlcmd =
 			"INSERT INTO img_data "
@@ -20,9 +26,15 @@ class ImgData extends AK_Db{
 				. "  img_seq_num "
 				. ", img_key "
 				. ", img "
+				. ", img_file_name "
+				. ", img_type "
+				. ", img_size "
 				. ", insert_time "
 			. ") VALUES ( "
 				. "  ? "
+				. ", ? "
+				. ", ? "
+				. ", ? "
 				. ", ? "
 				. ", ? "
 				. ", ? "
@@ -33,6 +45,9 @@ class ImgData extends AK_Db{
 			  0
 			, $imgKey
 			, $img
+			, $imgFileName
+			, $imgType
+			, $imgSize
 			, date( 'YmdHis' )
 		);
 		
@@ -59,6 +74,9 @@ class ImgData extends AK_Db{
 				. "  img_seq_num "
 				. ", img_key "
 				. ", img "
+				. ", img_file_name "
+				. ", img_type "
+				. ", img_size "
 			. "FROM img_data "
 			. "WHERE img_key = ? "
 			. "AND delete_flg = ? "
