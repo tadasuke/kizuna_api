@@ -11,8 +11,8 @@ class TalkController extends KizunaBaseController {
 	public function execTalkAction() {
 	
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
-		$themeId = $this -> getParam( 'theme_id' );
-		$talk    = $this -> getParam( 'talk' );
+		$themeId = $this -> getGetAndPostParam( 'theme_id' );
+		$talk    = $this -> getGetAndPostParam( 'talk' );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:'  . $themeId );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk:'     . $talk );
 		
@@ -49,11 +49,11 @@ class TalkController extends KizunaBaseController {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
-		$themeId     = $this -> getParam( 'theme_id' );
-		$talkUserKey = $this -> getParam( 'talk_user_key' );
-		$talkSeqNum  = $this -> getParam( 'talk_seq_num' );
-		$startSeqNum = $this -> getParam( 'start_seq_num' );
-		$dataCount   = $this -> getParam( 'data_count' );
+		$themeId     = $this -> getGetAndPostParam( 'theme_id' );
+		$talkUserKey = $this -> getGetAndPostParam( 'talk_user_key' );
+		$talkSeqNum  = $this -> getGetAndPostParam( 'talk_seq_num' );
+		$startSeqNum = $this -> getGetAndPostParam( 'start_seq_num' );
+		$dataCount   = $this -> getGetAndPostParam( 'data_count' );
 		
 		$talkObj = Talk::getInstance();
 		
@@ -141,7 +141,7 @@ class TalkController extends KizunaBaseController {
 	public function getThemeAction() {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
-		$themeId = $this -> getParam( 'theme_id' ) ?: NULL;
+		$themeId = $this -> getGetAndPostParam( 'theme_id' ) ?: NULL;
 		
 		$themeArray = Talk::getTheme( $themeId );
 		
@@ -167,8 +167,8 @@ class TalkController extends KizunaBaseController {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
-		$talkSeqNum = $this -> getParam( 'talk_seq_num' );
-		$comment    = $this -> getParam( 'comment' );
+		$talkSeqNum = $this -> getGetAndPostParam( 'talk_seq_num' );
+		$comment    = $this -> getGetAndPostParam( 'comment' );
 		
 		$commentSeqNum = '';
 		

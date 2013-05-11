@@ -17,9 +17,9 @@ class LoginController extends KizunaBaseController {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
-		$mailAddress = $this -> getParam( 'mail_address' );
-		$password    = $this -> getParam( 'password' );
-		$name        = $this -> getParam( 'name' );
+		$mailAddress = $this -> getGetAndPostParam( 'mail_address' );
+		$password    = $this -> getGetAndPostParam( 'password' );
+		$name        = $this -> getGetAndPostParam( 'name' );
 		
 		// 新規登録
 		$result = User::newEntry( $mailAddress, $password, $name );

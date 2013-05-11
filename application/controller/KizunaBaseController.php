@@ -64,7 +64,7 @@ class KizunaBaseController extends AK_BaseController {
 		//------------------
 		// レスポンスタイプ設定
 		//------------------
-		if ( strcmp( $this -> getParam( 'response_type' ), 'jsonp' ) == 0 ) {
+		if ( strcmp( $this -> getGetAndPostParam( 'response_type' ), 'jsonp' ) == 0 ) {
 			$this -> setResponseType( self::RESPONSE_TYPE_JSONP );
 		} else {
 			;

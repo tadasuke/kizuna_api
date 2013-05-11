@@ -9,7 +9,7 @@ class UserController extends KizunaBaseController {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
-		$targetUserKey = $this -> getParam( 'target_user_key' );
+		$targetUserKey = $this -> getGetAndPostParam( 'target_user_key' );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'targetUserKey:' . $targetUserKey );
 		
 		$targetUserNum = User::getUserNumByUserKey( $targetUserKey );
@@ -50,12 +50,12 @@ class UserController extends KizunaBaseController {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
-		$gender           = $this -> getParam( 'gender' );
-		$birthday         = $this -> getParam( 'birthday' );
-		$address          = $this -> getParam( 'address' );
-		$telephoneNumber1 = $this -> getParam( 'telephone_number_1' );
-		$telephoneNumber2 = $this -> getParam( 'telephone_number_2' );
-		$profileImgKey    = $this -> getParam( 'profile_img_key' );
+		$gender           = $this -> getGetAndPostParam( 'gender' );
+		$birthday         = $this -> getGetAndPostParam( 'birthday' );
+		$address          = $this -> getGetAndPostParam( 'address' );
+		$telephoneNumber1 = $this -> getGetAndPostParam( 'telephone_number_1' );
+		$telephoneNumber2 = $this -> getGetAndPostParam( 'telephone_number_2' );
+		$profileImgKey    = $this -> getGetAndPostParam( 'profile_img_key' );
 		
 		$userObj = UserFactory::get( $this -> playerUserNum );
 		$userObj -> updateUserData( $gender, $birthday, $address, $telephoneNumber1, $telephoneNumber2, $profileImgKey );
