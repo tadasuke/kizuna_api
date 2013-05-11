@@ -78,8 +78,4 @@ class ImgBean {
 		return $this -> imgSize;
 	}
 	
-	
-	
-	
-	
 }

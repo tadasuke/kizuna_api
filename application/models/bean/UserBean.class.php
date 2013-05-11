@@ -84,6 +84,17 @@ class UserBean {
 	}
 	public function getTelephoneNumber2() {
 		return $this -> telephoneNumber_2;
-	} 
+	}
 	
+	/**
+	 * プロフィール画像キー
+	 * @var string
+	 */
+	private $profileImgKey = NULL;
+	public function setProfileImgKey( $profileImgKey ) {
+		$this -> profileImgKey = $profileImgKey;
+	}
+	public function getProfileImgKey() {
+		return $this -> profileImgKey;
+	}
 }

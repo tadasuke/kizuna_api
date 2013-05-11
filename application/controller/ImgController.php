@@ -11,7 +11,8 @@ class ImgController extends KizunaBaseController {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
-		$imgKey = '';
+		$imgKey    = '';
+		$imgSeqNum = '';
 		
 		$upload_file = $_FILES["upload_file"];
 		$name    = $upload_file['name'];
@@ -34,8 +35,23 @@ class ImgController extends KizunaBaseController {
 		// アップロードが成功した場合
 		if ( strcmp( $result, Img::UPLOAD_IMG_COMPLETE ) == 0 ) {
 			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'upload_complete' );
-			$imgKey = Img::$newImgKey;
-			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'imgKey:' . $imgKey );
+			$imgKey    = Img::$newImgKey;
+			$imgSeqNum = Img::$newImgSeqNum;
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'imgKey:'    . $imgKey );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'imgSeqNum:' . $imgSeqNum );
+			
+			// 画像ビーン作成
+			$imgBean = new ImgBean();
+			$imgBean -> setImgSeqNum( $imgSeqNum );
+			$imgBean -> setImgKey( $imgKey );
+			$imgBean -> setImg( $img );
+			$imgBean -> setImgFileName( $name );
+			$imgBean -> setImgType( $type );
+			$imgBean -> setImgSize( $size );
+			
+			// アルバムデータ作成
+			UserFactory::get( $this -> playerUserNum ) -> getImgObj() -> addAlbum( $imgBean );
+			
 		} else {
 			;
 		}

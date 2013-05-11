@@ -59,7 +59,7 @@ class UserPersonalData extends AK_Db {
 				. ", address "
 				. ", telephone_number_1 "
 				. ", telephone_number_2 "
-				. ", profile_img_seq_id "
+				. ", profile_img_key "
 			. "FROM user_personal_data "
 			. "WHERE user_num = ? "
 			. "AND delete_flg = ? "
@@ -74,6 +74,44 @@ class UserPersonalData extends AK_Db {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		return $this -> valueArray;
+	}
+	
+	
+	/**
+	 * ユーザパーソナル情報更新
+	 * @param int $userNum
+	 * @param array $updateArray
+	 */
+	public function updatePersonalData( $userNum, array $updateArray ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:' . $userNum );
+		
+		$sqlcmd =
+			"UPDATE user_personal_data "
+			. "SET "
+			;
+		$bindArray = array();
+		foreach ( $updateArray as $key => $value ) {
+			$sqlcmd .= $key . ' = ? ';
+			$sqlcmd .= ',';
+			$bindArray[] = $value;
+		}
+		// 末尾のカンマを削除
+		$sqlcmd = substr( $sqlcmd, 0, strlen( $sqlcmd ) - 1 );
+		
+		$sqlcmd .= " WHERE user_num = ? ";
+		$bindArray[] = $userNum;
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'sqlcmd:' . $sqlcmd );
+	
+		$this -> sqlcmd    = $sqlcmd;
+		$this -> bindArray = $bindArray;
+		
+		$this -> exec();
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
 	}
 	
 }

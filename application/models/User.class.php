@@ -1,6 +1,7 @@
 <?php
 
-require_once 'bean/UserBean.class.php';
+require_once 'application/models/bean/UserBean.class.php';
+require_once 'application/models/Img.class.php';
 
 class User {
 	
@@ -37,11 +38,80 @@ class User {
 	}
 	
 	/**
+	 * 画像オブジェクト
+	 * @var Img
+	 */
+	private $imgObj = NULL;
+	public function getImgObj() {
+		if ( is_null( $this -> imgObj ) === TRUE ) {
+			$this -> imgObj = new Img( $this -> userNum );
+		} else {
+			;
+		}
+		return $this -> imgObj;
+	}
+	
+	
+	/**
 	 * コンストラクタ
 	 * @param int $userNum
 	 */
 	public function __construct( $userNum ) {
 		$this -> userNum = $userNum;
+	}
+	
+	
+	/**
+	 * ユーザ情報更新
+	 * @param string $gender
+	 * @param string $birthday
+	 * @param string $address
+	 * @param string $telephoneNumber1
+	 * @param string $telephoneNumber2
+	 * @param string $profileImgKey
+	 */
+	public function updateUserData( $gender, $birthday, $address, $telephoneNumber1, $telephoneNumber2, $profileImgKey ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'gender:'           . $gender );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'birthday:'         . $birthday );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'address:'          . $address );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'telephoneNumber1:' . $telephoneNumber1 );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'telephoneNumber2:' . $telephoneNumber2 );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'profileImgKey:'    . $profileImgKey );
+		
+		$updateArray = array();
+		if ( strlen( $gender ) > 0 ) {
+			$updateArray['gender'] = $gender;
+		} else {
+			;
+		}
+		if ( strlen( $birthday ) > 0 ) {
+			$updateArray['birthday'] = $birthday;
+		} else {
+			;
+		}
+		if ( strlen( $address ) > 0 ) {
+			$updateArray['address'] = $address;
+		} else {
+			;
+		}
+		if ( strlen( $telephoneNumber1 ) > 0 ) {
+			$updateArray['telephone_number_1'] = $telephoneNumber1;
+		} else {
+			;
+		}
+		if ( strlen( $telephoneNumber2 ) > 0 ) {
+			$updateArray['telephpne_number_2'] = $telephoneNumber2;
+		} else {
+			;
+		}
+		
+		DataClassFactory::getUserPersonalDataObj() -> updatePersonalData( $this -> userNum, $updateArray );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
 	}
 	
 	//--------------------------- private ---------------------------------
@@ -62,11 +132,13 @@ class User {
 			$birthday          = AK_Gadget::dateFormat( $userPersonalDataValueArray[0]['birthday'], 'Ymd'  );
 			$telephoneNumber_1 = $userPersonalDataValueArray[0]['telephone_number_1'];
 			$telephoneNumber_2 = $userPersonalDataValueArray[0]['telephone_number_2'];
+			$profileImgKey     = $userPersonalDataValueArray[0]['profile_img_key'];
 			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'name:'              . $name );
 			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'gender:'            . $gender );
 			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'birthday:'          . $birthday );
 			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'telephoneNumber_1:' . $telephoneNumber_1 );
 			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'telephoneNumber_2:' . $telephoneNumber_2 );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'profileImgKey:'     . $profileImgKey );
 			
 			$userBean = new UserBean();
 			$userBean -> setUserNum( $this -> userNum );
@@ -75,6 +147,7 @@ class User {
 			$userBean -> setBirthday( $birthday );
 			$userBean -> setTelephoneNumber1( $telephoneNumber_1 );
 			$userBean -> setTelephoneNumber2( $telephoneNumber_2 );
+			$userBean -> setProfileImgKey( $profileImgKey );
 			
 			$this -> userBean = $userBean;
 			

@@ -7,8 +7,49 @@ class Img {
 	const UPLOAD_IMG_COMPLETE = '0';
 	const UPLOAD_IMG_ERROR    = '1';
 	
-	public static $newImgSeqNum = NULL;
+	const USER_DELETE_FLG_FALSE = '0';
+	const USER_DELETE_FLG_TRUE  = '1';
 	
+	/**
+	 * ユーザNUM
+	 * @var int
+	 */
+	private $userNum = NULL;
+	
+	/**
+	 * コンストラクタ
+	 * @param int $userNum
+	 */
+	public function __construct( $userNum ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:' . $userNum );
+		
+		$this -> userNum = $userNum;
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
+	
+	/**
+	 * アルバムに画像追加
+	 * @param int $userNum
+	 * @param ImgBean $imgBean
+	 */
+	public function addAlbum( ImgBean $imgBean ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		DataClassFactory::getAlbumDataObj() -> insert( $this -> userNum, $imgBean -> getImgSeqNum(), self::USER_DELETE_FLG_FALSE );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
+	
+	
+	
+	//---------------------------------------- static ----------------------------------------------
+	public static $newImgSeqNum = NULL;
 	public static $newImgKey = NULL;
 	
 	/**

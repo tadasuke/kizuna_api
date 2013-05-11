@@ -82,6 +82,22 @@ abstract class DataClassFactory {
 	}
 	
 	
+	/**
+	 * アルバムデータ
+	 * @var AlbumData
+	 */
+	private static $albumDataObj = NULL;
+	public static function getAlbumDataObj() {
+		if ( is_null( self::$albumDataObj ) === TRUE ) {
+			require_once self::DEFAULT_TRUN_DIR . 'AlbumData.class.php';
+			self::$albumDataObj = new AlbumData();
+		} else {
+			;
+		}
+		return self::$albumDataObj;
+	}
+	
+	
 	//------------------------- マスター系 ----------------------------------
 	
 	/**
