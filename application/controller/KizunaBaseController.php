@@ -102,6 +102,9 @@ class KizunaBaseController extends AK_BaseController {
 		} else {
 			$this -> addResponseParam( 'error_flg', AK_Registry::get( REGISTRY_ERROR_FLG_NAME ) );
 		}
+		$info = array();
+		$info['id'] = AK_Log::getLogClass() -> getProcessId();
+		$this -> addResponseParam( 'info', $info );
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 	}
