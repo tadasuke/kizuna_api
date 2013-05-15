@@ -87,4 +87,20 @@ class ImgController extends KizunaBaseController {
 		
 	}
 	
+	
+	/**
+	 * 画像データ取得
+	 */
+	public function getImgDataAction() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		
+		
+		
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
+	
 }

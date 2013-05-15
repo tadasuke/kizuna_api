@@ -1,8 +1,8 @@
 <?php
 
-class SystemIni {
+class SystemIni extends AK_Ini {
 	
-	public static $configArray = array(
+	public $configArray = array(
 		// システム設定
 		'system_config' => array(
 			'cookie_config' => array(

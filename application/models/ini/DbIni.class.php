@@ -1,8 +1,8 @@
 <?php
 
-class DbIni {
+class DbIni extends AK_Ini {
 	
-	public static $configArray = array(
+	public $configArray = array(
 		'db_config' => array(
 			  'database_name' => 'kizuna_db'
 			, 'host'          => 'localhost'

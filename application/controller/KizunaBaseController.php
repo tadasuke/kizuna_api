@@ -27,24 +27,24 @@ class KizunaBaseController extends AK_BaseController {
 		//-------------
 		// ログ出力先設定
 		//-------------
-		AK_Log::setAkLoggingClass( AK_Ini::getConfig( 'system_config', 'log_config', 'path' ), AK_Log::DEBUG );
+		AK_Log::setAkLoggingClass( AK_Config::getConfig( 'system_config', 'log_config', 'path' ), AK_Log::DEBUG );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
 		//-----------
 		// DB接続設定
 		//-----------
 		// TRUN
-		$databaseName = AK_Ini::getConfig( 'db_config', 'database_name' );
-		$host         = AK_Ini::getConfig( 'db_config', 'host' );
-		$user         = AK_Ini::getConfig( 'db_config', 'user' );
-		$password     = AK_Ini::getConfig( 'db_config', 'password' );
+		$databaseName = AK_Config::getConfig( 'db_config', 'database_name' );
+		$host         = AK_Config::getConfig( 'db_config', 'host' );
+		$user         = AK_Config::getConfig( 'db_config', 'user' );
+		$password     = AK_Config::getConfig( 'db_config', 'password' );
 		$akDbConfig = new AK_DbConfig( $databaseName, $host, $user, $password );
 		AK_DaoFactory::addDbConfig( $akDbConfig );
 		// MASTER
-		$databaseName = AK_Ini::getConfig( 'master_db_config', 'database_name' );
-		$host         = AK_Ini::getConfig( 'master_db_config', 'host' );
-		$user         = AK_Ini::getConfig( 'master_db_config', 'user' );
-		$password     = AK_Ini::getConfig( 'master_db_config', 'password' );
+		$databaseName = AK_Config::getConfig( 'master_db_config', 'database_name' );
+		$host         = AK_Config::getConfig( 'master_db_config', 'host' );
+		$user         = AK_Config::getConfig( 'master_db_config', 'user' );
+		$password     = AK_Config::getConfig( 'master_db_config', 'password' );
 		$akDbConfig = new AK_DbConfig( $databaseName, $host, $user, $password );
 		AK_DaoFactory::addDbConfig( $akDbConfig, MASTER_DB_IDEMTIFICATION_NAME );
 		

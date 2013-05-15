@@ -117,9 +117,9 @@ class LoginController extends KizunaBaseController {
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userKey:'      . $userKey );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'hashPassword:' . $hashPassword );
 		
-		$keyName   = AK_Ini::getConfig( 'system_config', 'cookie_config', 'login_key_name' );
-		$keepTime  = AK_Ini::getConfig( 'system_config', 'cookie_config', 'keep_time' );
-		$delimiter = AK_Ini::getConfig( 'system_config', 'cookie_config', 'login_key_delimiter' );
+		$keyName   = AK_Config::getConfig( 'system_config', 'cookie_config', 'login_key_name' );
+		$keepTime  = AK_Config::getConfig( 'system_config', 'cookie_config', 'keep_time' );
+		$delimiter = AK_Config::getConfig( 'system_config', 'cookie_config', 'login_key_delimiter' );
 		
 		$cookieValue = $userKey . $delimiter . $hashPassword;
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'cookieValue:' . $cookieValue );

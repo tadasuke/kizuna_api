@@ -1,6 +1,7 @@
 <?php
 
 require_once 'Akatsuki/AK_Ini.php';
+require_once 'Akatsuki/AK_Config.php';
 require_once 'Akatsuki/AK_Core.php';
 require_once 'Akatsuki/AK_Registry.php';
 require_once 'Akatsuki/AK_Log.php';
@@ -20,8 +21,10 @@ require_once 'application/models/ini/SystemIni.class.php';
 require_once 'application//Define.php';
 
 // 設定情報登録
-AK_Ini::setConfigFromArray( DbIni::$configArray );
-AK_Ini::setConfigFromArray( SystemIni::$configArray );
+$ini = new DbIni();
+AK_Config::setConfigFromArray( $ini -> configArray );
+$ini = new SystemIni();
+AK_Config::setConfigFromArray( $ini -> configArray );
 
 // インスタンス取得
 $akCoreClass = AK_Core::getInstance();

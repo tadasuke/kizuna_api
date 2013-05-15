@@ -17,6 +17,12 @@ class Img {
 	private $userNum = NULL;
 	
 	/**
+	 * 画像ビーン配列
+	 * @var array[ImgBean]
+	 */
+	private $imgBeanArray = NULL;
+	
+	/**
 	 * コンストラクタ
 	 * @param int $userNum
 	 */
@@ -41,6 +47,37 @@ class Img {
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
 		DataClassFactory::getAlbumDataObj() -> insert( $this -> userNum, $imgBean -> getImgSeqNum(), self::USER_DELETE_FLG_FALSE );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
+	
+	
+	/**
+	 * 画像ビーン配列取得
+	 * @return array[ImgBean]
+	 */
+	public function getImgBeanArray() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
+	
+	
+	//---------------------------------------- private ----------------------------------------------
+	
+	/**
+	 * 画像ビーン配列設定
+	 */
+	private function setImgBeanArray() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		
+		
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		
