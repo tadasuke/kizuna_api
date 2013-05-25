@@ -121,7 +121,7 @@ class KizunaBaseController extends AK_BaseController {
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
 		// クッキー名取得
-		$loginKeyName = AK_Ini::getConfig( 'system_config', 'cookie_config', 'login_key_name' );
+		$loginKeyName = AK_Config::getConfig( 'system_config', 'cookie_config', 'login_key_name' );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'loginKeyName:' . $loginKeyName );
 		// クッキー取得
 		$loginKey = (isset( $_COOKIE[$loginKeyName] ) === TRUE) ? $_COOKIE[$loginKeyName] : '';
@@ -138,7 +138,7 @@ class KizunaBaseController extends AK_BaseController {
 		//-----------------------------------
 		// クッキーから、ユーザキー、パスワードを抽出
 		//-----------------------------------
-		$array = explode( AK_Ini::getConfig( 'system_config', 'cookie_config', 'login_key_delimiter' ), $loginKey );
+		$array = explode( AK_Config::getConfig( 'system_config', 'cookie_config', 'login_key_delimiter' ), $loginKey );
 		$userKey  = $array[0];
 		$password = $array[1];
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userKey:'  . $userKey );
