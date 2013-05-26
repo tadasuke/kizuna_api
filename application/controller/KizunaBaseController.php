@@ -30,6 +30,14 @@ class KizunaBaseController extends AK_BaseController {
 		AK_Log::setAkLoggingClass( AK_Config::getConfig( 'system_config', 'log_config', 'path' ), AK_Log::DEBUG );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
+		//--------------
+		// デフォルト値設定
+		//--------------
+		// DBコミットフラグ
+		AK_Registry::set( REGISTRY_DB_COMMIT_FLG_KEY_NAME, TRUE );
+		// サーバエラーフラグ
+		AK_Registry::set( REGISTRY_SERVER_ERROR_KEY_NAME, RESULT_NORMAL );
+		
 		//-----------
 		// DB接続設定
 		//-----------
@@ -97,11 +105,7 @@ class KizunaBaseController extends AK_BaseController {
 		}
 		
 		// レスポンスパラメータに値を追加
-		if ( AK_Registry::isRegistry( REGISTRY_ERROR_FLG_NAME ) === FALSE ) {
-			$this -> addResponseParam( 'error_flg', RESULT_NORMAL );
-		} else {
-			$this -> addResponseParam( 'error_flg', AK_Registry::get( REGISTRY_ERROR_FLG_NAME ) );
-		}
+		$this -> addResponseParam( 'error_flg', AK_Registry::get( REGISTRY_SERVER_ERROR_KEY_NAME ) );
 		$info = array();
 		$info['id'] = AK_Log::getLogClass() -> getProcessId();
 		$this -> addResponseParam( 'info', $info );
