@@ -168,4 +168,37 @@ class UserBasicData extends AK_Db {
 		
 	}
 	
+	
+	/**
+	 * データ取得
+	 * @param string $userKey
+	 */
+	public function getAllData() {
+	
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+	
+		$this -> sqlcmd =
+			"SELECT "
+				. "  user_num "
+				. ", user_key "
+				. ", mail_address "
+				. ", password "
+				. ", status "
+				. ", entry_date "
+				. ", cancel_flg "
+			. "FROM user_basic_data "
+			. "WHERE delete_flg = ? "
+			;
+			
+		$this -> bindArray = array(
+			DELETE_FLG_FALSE
+		);
+																							
+		$this -> select();
+	
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		return $this -> valueArray;
+	
+	}
+	
 }

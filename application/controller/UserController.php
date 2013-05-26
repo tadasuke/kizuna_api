@@ -9,30 +9,51 @@ class UserController extends KizunaBaseController {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
-		$targetUserKey = $this -> getGetAndPostParam( 'target_user_key' );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'targetUserKey:' . $targetUserKey );
+		$userDataArray = array();
 		
-		$targetUserNum = User::getUserNumByUserKey( $targetUserKey );
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'targetUserNum:' . $targetUserNum );
+		$targetUserKeyCsv = $this -> getGetAndPostParam( 'target_user_key' );
 		
-		$targetUserObj = UserFactory::get( $targetUserNum );
+		$targetUserNumArray = array();
 		
-		// ユーザデータ取得
-		$userBean = $targetUserObj -> getUserBean();
-		
-		// ユーザビーンが取得できた場合
-		if ( is_null( $userBean ) === FALSE ) {
-			$userData = array(
-				  'user_key'           => $targetUserKey
-				, 'name'               => $userBean -> getUserName()
-				, 'gender'             => $userBean -> getGender() ?: ''
-				, 'birthday'           => $userBean -> getBirthday() ?: ''
-				, 'telephone_number_1' => $userBean -> getTelephoneNumber1() ?: ''
-				, 'telephone_number_2' => $userBean -> getTelephoneNumber2() ?: ''
-				, 'profile_img_key'    => $userBean -> getProfileImgKey() ?: ''
-			);
+		// ターゲットユーザキーが設定されていた場合
+		if ( strlen( $targetUserKeyCsv ) > 0 ) {
+			// カンマ区切りのCSVを配列にする
+			$targetUserKeyArray = explode( ',', $targetUserKeyCsv );
+			foreach ( $targetUserKeyArray as $targetUserKey ) {
+				AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'targetUserKey:' . $targetUserKey );
+				// ユーザキーを元にユーザNUMを取得
+				$targetUserNumArray[] = User::getUserNumByUserKey( $targetUserKey );
+			}
+		// ターゲットユーザキーが設定されていなかった場合
 		} else {
-			$userData = array();
+			// DBから全ユーザ基本データを取得
+			$userBascicDataArray = User::getAllUserBaiscData();
+			foreach ( $userBascicDataArray as $data ) {
+				$targetUserNumArray[] = $data['user_num'];
+			}
+		}
+		
+		foreach ( $targetUserNumArray as $targetUserNum ) {
+			$targetUserObj = UserFactory::get( $targetUserNum );
+			
+			// ユーザデータ取得
+			$userBean = $targetUserObj -> getUserBean();
+			
+			// ユーザビーンが取得できた場合
+			if ( is_null( $userBean ) === FALSE ) {
+				$userData[] = array(
+					  'user_key'           => $userBean -> getUserKey()
+					, 'name'               => $userBean -> getUserName()
+					, 'gender'             => $userBean -> getGender() ?: ''
+					, 'birthday'           => $userBean -> getBirthday() ?: ''
+					, 'telephone_number_1' => $userBean -> getTelephoneNumber1() ?: ''
+					, 'telephone_number_2' => $userBean -> getTelephoneNumber2() ?: ''
+					, 'profile_img_key'    => $userBean -> getProfileImgKey() ?: ''
+				);
+			} else {
+				;
+			}
+			
 		}
 		
 		// レスポンス設定

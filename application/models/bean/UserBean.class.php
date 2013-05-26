@@ -14,6 +14,20 @@ class UserBean {
 		return $this -> userNum;
 	}
 	
+	
+	/**
+	 * ユーザキー
+	 * @var int
+	 */
+	private $userKey = NULL;
+	public function setUserKey( $userKey ) {
+		$this -> userKey = $userKey;
+	}
+	public function getUserKey() {
+		return $this -> userKey;
+	}
+	
+	
 	/**
 	 * ユーザ名
 	 * @var string

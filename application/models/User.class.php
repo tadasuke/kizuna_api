@@ -133,12 +133,14 @@ class User {
 			$telephoneNumber_1 = $userPersonalDataValueArray[0]['telephone_number_1'];
 			$telephoneNumber_2 = $userPersonalDataValueArray[0]['telephone_number_2'];
 			$profileImgKey     = $userPersonalDataValueArray[0]['profile_img_key'];
-			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'name:'              . $name );
-			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'gender:'            . $gender );
-			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'birthday:'          . $birthday );
-			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'telephoneNumber_1:' . $telephoneNumber_1 );
-			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'telephoneNumber_2:' . $telephoneNumber_2 );
-			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'profileImgKey:'     . $profileImgKey );
+			$userKey           = self::getUserKeyByUserNum( $this -> userNum );
+			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'name:'              . $name );
+			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'gender:'            . $gender );
+			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'birthday:'          . $birthday );
+			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'telephoneNumber_1:' . $telephoneNumber_1 );
+			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'telephoneNumber_2:' . $telephoneNumber_2 );
+			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'profileImgKey:'     . $profileImgKey );
+			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'userKey:'           . $userKey );
 			
 			$userBean = new UserBean();
 			$userBean -> setUserNum( $this -> userNum );
@@ -148,6 +150,7 @@ class User {
 			$userBean -> setTelephoneNumber1( $telephoneNumber_1 );
 			$userBean -> setTelephoneNumber2( $telephoneNumber_2 );
 			$userBean -> setProfileImgKey( $profileImgKey );
+			$userBean -> setUserKey( $userKey );
 			
 			$this -> userBean = $userBean;
 			
@@ -335,6 +338,21 @@ class User {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		return $userName;
+		
+	}
+	
+	
+	/**
+	 * 全ユーザ基本データ取得
+	 */
+	public static function getAllUserBaiscData() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		$valueArray = DataClassFactory::getUserBaslcDataObj() -> getAllData();
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		return $valueArray;
 		
 	}
 	

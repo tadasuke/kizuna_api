@@ -1,5 +1,12 @@
 <?php
 
+
+require_once 'Zend/Debug.php';
+
+
+
+
+
 require_once 'Akatsuki/AK_Ini.php';
 require_once 'Akatsuki/AK_Config.php';
 require_once 'Akatsuki/AK_Core.php';
