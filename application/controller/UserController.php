@@ -12,6 +12,18 @@ class UserController extends KizunaBaseController {
 		$userDataArray = array();
 		
 		$targetUserKeyCsv = $this -> getGetAndPostParam( 'target_user_key' );
+		$getParamCsv = $this -> getGetAndPostParam( 'get_param' );
+		
+		//---------------------
+		// 取得パラメータ配列を作成
+		//---------------------
+		$getParamArray = array( 'user_key', 'name' );
+		if ( strlen( $getParamCsv ) > 0 ) {
+			foreach ( explode( ',', $getParamCsv ) as $param ) {
+				$getParamArray[] = $param;
+			}
+		}
+		$getParamArray = array_unique( $getParamArray );
 		
 		$targetUserNumArray = array();
 		
@@ -41,15 +53,42 @@ class UserController extends KizunaBaseController {
 			
 			// ユーザビーンが取得できた場合
 			if ( is_null( $userBean ) === FALSE ) {
-				$userData[] = array(
+				$userData = array(
 					  'user_key'           => $userBean -> getUserKey()
 					, 'name'               => $userBean -> getUserName()
-					, 'gender'             => $userBean -> getGender() ?: ''
-					, 'birthday'           => $userBean -> getBirthday() ?: ''
-					, 'telephone_number_1' => $userBean -> getTelephoneNumber1() ?: ''
-					, 'telephone_number_2' => $userBean -> getTelephoneNumber2() ?: ''
-					, 'profile_img_key'    => $userBean -> getProfileImgKey() ?: ''
 				);
+				// 性別
+				if ( in_array( 'gender', $getParamArray ) === TRUE ) {
+					$userData['gender'] = $userBean -> getGender();
+				} else {
+					;
+				}
+				// 誕生日
+				if ( in_array( 'birthday', $getParamArray ) === TRUE ) {
+					$userData['birthday'] = $userBean -> getBirthday();
+				} else {
+					;
+				}
+				// 電話番号１
+				if ( in_array( 'telephone_number_1', $getParamArray ) === TRUE ) {
+					$userData['telephone_number_1'] = $userBean -> getTelephoneNumber1();
+				} else {
+					;
+				}
+				// 電話番号２
+				if ( in_array( 'telephone_number_2', $getParamArray ) === TRUE ) {
+					$userData['telephone_number_2'] = $userBean -> getTelephoneNumber2();
+				} else {
+					;
+				}
+				// プロフィール画像キー
+				if ( in_array( 'profile_img_key', $getParamArray ) === TRUE ) {
+					$userData['profile_img_key'] = $userBean -> getProfileImgKey();
+				} else {
+					;
+				}
+				
+				$userDataArray[] = $userData;
 			} else {
 				;
 			}
@@ -57,7 +96,7 @@ class UserController extends KizunaBaseController {
 		}
 		
 		// レスポンス設定
-		$this -> setResponseParam( array( 'user_data' => $userData ) );
+		$this -> setResponseParam( array( 'user_data' => $userDataArray ) );
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		
