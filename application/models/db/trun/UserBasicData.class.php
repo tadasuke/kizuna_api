@@ -201,4 +201,43 @@ class UserBasicData extends AK_Db {
 	
 	}
 	
+	
+	/**
+	 * ユーザデータ更新
+	 * @param int $userNum
+	 * @param array $updateArray 
+	 */
+	public function updateBasicData( $userNum, array $updateArray ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:' . $userNum );
+		
+		$sqlcmd =
+			"UPDATE user_basic_data "
+			. "SET "
+			;
+		$bindArray = array();
+		foreach ( $updateArray as $key => $value ) {
+			$sqlcmd .= $key . ' = ? ';
+			$sqlcmd .= ',';
+			$bindArray[] = $value;
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'value:' . $value );
+		}
+		// 末尾のカンマを削除
+		$sqlcmd = substr( $sqlcmd, 0, strlen( $sqlcmd ) - 1 );
+		
+		$sqlcmd .= " WHERE user_num = ? ";
+		$bindArray[] = $userNum;
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'sqlcmd:' . $sqlcmd );
+	
+		$this -> sqlcmd    = $sqlcmd;
+		$this -> bindArray = $bindArray;
+		
+		$this -> exec();
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
+	
 }
