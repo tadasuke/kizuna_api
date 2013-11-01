@@ -16,6 +16,16 @@ class User {
 	 
 	const CANCEL_FLG_FALSE = '0';
 	const CANCEL_FLG_TRUE  = '1';
+	/**
+	 * ユーザ本人のデータ
+	 * @var string
+	 */
+	const PERSONAL_USER_DATA 	= '0';
+	/**
+	 * ユーザ本人以外のデータ
+	 * @var string
+	 */
+	const OTHER_USER_DATA		= '1';
 	
 	/**
 	 * ユーザNum

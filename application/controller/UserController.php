@@ -87,6 +87,12 @@ class UserController extends KizunaBaseController {
 				} else {
 					;
 				}
+				// ユーザ属性
+				if ( strcmp( $this -> playerUserNum, $targetUserNum ) == 0 ) {
+					$userData['identify_person_type'] = User::PERSONAL_USER_DATA;
+				} else {
+					$userData['identify_person_type'] = User::OTHER_USER_DATA;
+				}
 				
 				$userDataArray[] = $userData;
 			} else {
