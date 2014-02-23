@@ -16,6 +16,16 @@ class User {
 	 
 	const CANCEL_FLG_FALSE = '0';
 	const CANCEL_FLG_TRUE  = '1';
+	/**
+	 * ユーザ本人のデータ
+	 * @var string
+	 */
+	const PERSONAL_USER_DATA 	= '0';
+	/**
+	 * ユーザ本人以外のデータ
+	 * @var string
+	 */
+	const OTHER_USER_DATA		= '1';
 	
 	/**
 	 * ユーザNum
@@ -219,6 +229,57 @@ class User {
 		return $result;
 		
 	}
+	
+	
+	/**
+	 * 仮登録
+	 * @param string $mailAddress
+	 * @param string $password
+	 * @param string $name
+	 */
+	public static function newTempEntry( $mailAddress, $password, $name ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'mailAddress:' . $mailAddress );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'password:'    . $password );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'name:'        . $name );
+		
+		// 登録可否チェック
+		$result = self::checkNewEntry( $mailAddress, $password, $name );
+		
+		if ( strcmp( $result, self::NEW_ENTRY_CHECK_NORMAL ) != 0 ) {
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'new_entry_error!!' );
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+			return $result;
+		} else {
+			;
+		}
+		
+		// パスワードをハッシュ化
+		$hashPassword = Library::string2hash( $password );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'hashPassword:' . $hashPassword );
+		
+		// ユーザキー作成
+		$userKey = $mailAddress + time();
+		$userKey = Library::string2hash( $userKey );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userKey:' . $userKey );
+		
+		//------------
+		// 新規仮登録
+		//------------
+		// ユーザ基本データ作成
+		$userNum = self::createUserBasicData( $userKey, $mailAddress, $hashPassword );
+		// ユーザパーソナルデータ作成
+		self::createUserPersonalData( $userNum, $name );
+		
+		self::$newUserKey      = $userKey;
+		self::$newHashPassword = $hashPassword;
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		return $result;
+		
+	}
+	
 	
 	/**
 	 * ユーザデータ取得
@@ -463,7 +524,7 @@ class User {
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'mailAddress:'  . $mailAddress );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'hashPassword:' . $hashPassword );
 		
-		$userNum = DataClassFactory::getUserBaslcDataObj() -> insert( $userKey, $mailAddress, $hashPassword, self::USER_STATUS_MENBER, date( 'YmdHis' ), self::CANCEL_FLG_FALSE );
+		$userNum = DataClassFactory::getUserBaslcDataObj() -> insert( $userKey, $mailAddress, $hashPassword, self::USER_STATUS_PRE_MENBER, date( 'YmdHis' ), self::CANCEL_FLG_FALSE );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:' . $userNum );
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
