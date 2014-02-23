@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 class UserController extends KizunaBaseController {
 	
@@ -87,6 +87,12 @@ class UserController extends KizunaBaseController {
 				} else {
 					;
 				}
+				// メールアドレス
+				if ( in_array( 'mail_address', $getParamArray ) === TRUE ) {
+					$userData['mail_address'] = $userBean -> getMailAddress();
+				} else {
+					;
+				}
 				
 				$userDataArray[] = $userData;
 			} else {
@@ -101,7 +107,6 @@ class UserController extends KizunaBaseController {
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		
 	}
-	
 	
 	/**
 	 * ユーザデータ変更

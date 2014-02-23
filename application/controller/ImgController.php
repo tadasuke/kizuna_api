@@ -87,7 +87,38 @@ class ImgController extends KizunaBaseController {
 		
 	}
 	
-	
+
+	/**
+	 * ユーザプロフィール画像取得
+	 */
+	public function getProfileImgAction() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		$userNum = $this -> getGetAndPostParam( 'user_num' );
+        
+		$imgKey = NULL;
+		$valueArray = DataClassFactory::getUserPersonalDataObj() -> getDataByUserNum( $userNum );
+		if ( count( $valueArray ) > 0 ) {
+			$imgKey = $valueArray[0]['profile_img_key'];
+		} else {
+			;
+		}
+
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'user_num:' . $userNum );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'profile_img_key:' . $imgKey );
+        
+		// 画像ビーン取得
+		$imgBean = Img::getImgByImgKey( $imgKey );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		$this -> setContentType( 'Content-type: ' . $imgBean -> getImgType() );
+		$this -> setResponseType( self::RESPONSE_TYPE_DATA );
+		$this -> setResponseParam( array( $imgBean -> getImg() ) );
+
+	}
+
+    
 	/**
 	 * 画像データ取得
 	 */

@@ -103,7 +103,8 @@ class User {
 			;
 		}
 		if ( strlen( $telephoneNumber2 ) > 0 ) {
-			$updateArray['telephpne_number_2'] = $telephoneNumber2;
+//			$updateArray['telephpne_number_2'] = $telephoneNumber2;
+			$updateArray['telephone_number_2'] = $telephoneNumber2;
 		} else {
 			;
 		}
@@ -134,6 +135,7 @@ class User {
 			$telephoneNumber_2 = $userPersonalDataValueArray[0]['telephone_number_2'];
 			$profileImgKey     = $userPersonalDataValueArray[0]['profile_img_key'];
 			$userKey           = self::getUserKeyByUserNum( $this -> userNum );
+			$mailAddress       = self::getMailAddressByUserNum( $this -> userNum );
 			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'name:'              . $name );
 			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'gender:'            . $gender );
 			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'birthday:'          . $birthday );
@@ -141,6 +143,7 @@ class User {
 			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'telephoneNumber_2:' . $telephoneNumber_2 );
 			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'profileImgKey:'     . $profileImgKey );
 			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'userKey:'           . $userKey );
+			AK_Log::getLogClass() -> log( AK_Log::DEBUG, __METHOD__, __LINE__, 'mailAddress:'       . $mailAddress );
 			
 			$userBean = new UserBean();
 			$userBean -> setUserNum( $this -> userNum );
@@ -151,13 +154,14 @@ class User {
 			$userBean -> setTelephoneNumber2( $telephoneNumber_2 );
 			$userBean -> setProfileImgKey( $profileImgKey );
 			$userBean -> setUserKey( $userKey );
+			$userBean -> setMailAddress( $mailAddress );
 			
 			$this -> userBean = $userBean;
 			
 		} else {
 			;
 		}
-		
+
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		
 	}
@@ -318,6 +322,32 @@ class User {
 	
 	
 	/**
+	 * メールアドレス取得
+	 * @param int $userNum
+	 * @return string $mailAddress
+	 */
+	public static function getMailAddressByUserNum( $userNum ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:' . $userNum );
+		
+		$mailAddress = NULL;
+		
+		$valueArray = DataClassFactory::getUserBaslcDataObj() -> getDataByUserNum( $userNum );
+		if ( count( $valueArray ) > 0 ) {
+			$mailAddress = $valueArray[0]['mail_address'];
+		} else {
+			;
+		}
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'mailAddress:' . $mailAddress );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		return $mailAddress;
+		
+	}
+	
+	
+	/**
 	 * ユーザ名取得
 	 * ユーザNUMを元にユーザ名を取得
 	 * @param int $userNum
@@ -356,7 +386,7 @@ class User {
 		
 	}
 	
-	
+
 	//------------------------------- private static ----------------------------------
 	
 	/**

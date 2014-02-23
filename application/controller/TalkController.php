@@ -54,6 +54,7 @@ class TalkController extends KizunaBaseController {
 		$talkSeqNum  = $this -> getGetAndPostParam( 'talk_seq_num' );
 		$startSeqNum = $this -> getGetAndPostParam( 'start_seq_num' );
 		$dataCount   = $this -> getGetAndPostParam( 'data_count' );
+		$searchWord  = $this -> getGetAndPostParam( 'search_word' );
 		
 		$talkObj = Talk::getInstance();
 		
@@ -92,7 +93,13 @@ class TalkController extends KizunaBaseController {
 		} else {
 			;
 		}
-		
+		// 検索ワード
+		if ( strlen( $searchWord ) > 0 ) {
+			$talkObj -> setSearchWord( $searchWord );
+		} else {
+			;
+		}
+
 		// トークデータ取得
 		$talkBeanArray = $talkObj -> getTalkBeanArray();
 		
@@ -133,8 +140,41 @@ class TalkController extends KizunaBaseController {
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		
 	}
-	
-	
+    
+	/**
+	 * トークデータ変更
+	 */
+	public function updateTalkDataAction() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		$seq_num  = $this -> getGetAndPostParam( 'seq_num' );
+		$theme_id = $this -> getGetAndPostParam( 'theme_id' );
+		$talk     = $this -> getGetAndPostParam( 'talk' );
+		
+		Talk::updateTalkData( $this -> playerUserNum, $seq_num, $theme_id, $talk );
+
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		$this -> setResponseParam( array( 'result' => '0' ) );
+
+	}
+
+    /**
+	 * トークデータ削除
+	 */
+	public function deleteTalkDataAction() {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		$seq_num     = $this -> getGetAndPostParam( 'seq_num' );
+		
+		Talk::deleteTalkData( $this -> playerUserNum, $seq_num );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		$this -> setResponseParam( array( 'result' => '0' ) );
+		
+	}
+
 	/**
 	 * 全テーマ取得
 	 */
@@ -194,5 +234,4 @@ class TalkController extends KizunaBaseController {
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		
 	}
-	
 }

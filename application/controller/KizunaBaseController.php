@@ -96,7 +96,7 @@ class KizunaBaseController extends AK_BaseController {
 	 */
 	public function afterRun() {
 		
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+//		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		
 		// DBコミット
 		$daoArray = AK_DaoFactory::getAllDao();
@@ -110,7 +110,7 @@ class KizunaBaseController extends AK_BaseController {
 		$info['id'] = AK_Log::getLogClass() -> getProcessId();
 		$this -> addResponseParam( 'info', $info );
 		
-		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+//		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 	}
 	
 	//----------------------------------- proteced -------------------------------

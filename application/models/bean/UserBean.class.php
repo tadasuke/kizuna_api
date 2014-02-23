@@ -29,6 +29,19 @@ class UserBean {
 	
 	
 	/**
+	 * メールアドレス
+	 * @var int
+	 */
+	private $mailAddress = NULL;
+	public function setMailAddress( $mailAddress ) {
+		$this -> mailAddress = $mailAddress;
+	}
+	public function getMailAddress() {
+		return $this -> mailAddress;
+	}
+	
+	
+	/**
 	 * ユーザ名
 	 * @var string
 	 */

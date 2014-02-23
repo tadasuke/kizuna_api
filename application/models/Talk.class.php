@@ -100,6 +100,15 @@ class Talk {
 	public function setStartTalkSeqNum( $startTalkSeqNum ) {
 		$this -> startTalkSeqNum = $startTalkSeqNum;
 	}
+
+	/**
+	 * 検索ワード
+	 * @var string
+	 */
+	private $searchWord = NULL;
+	public function setSearchWord( $searchWord ) {
+		$this -> searchWord = $searchWord;
+	}
 	
 	//-------------------------------------- public -----------------------------------------
 	
@@ -115,7 +124,6 @@ class Talk {
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
 		
 	}
-	
 	
 	//--------------------------------------- private ---------------------------------------------
 	
@@ -133,6 +141,7 @@ class Talk {
 				, $this -> searchThemeId
 				, $this -> startTalkSeqNum
 				, self::TALK_USER_DELETE_FLG_FALSE
+				, $this -> searchWord
 		);
 		
 		$talkBeanArray = array();
@@ -264,6 +273,75 @@ class Talk {
 		
 	}
 	
+	/**
+	 * トークデータ更新
+	 * @param string $userNum
+	 * @param string $seq_num
+	 * @param string $theme_id
+	 * @param string $talk
+	 */
+	public static function updateTalkData( $userNum, $seq_num, $theme_id, $talk ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:'  . $userNum );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'seq_num:'  . $seq_num );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'theme_id:' . $theme_id );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'talk:'     . $talk );
+
+		//------------
+		// チェック処理
+		//------------
+		$result = self::checkTalk( $theme_id, $talk );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'result:' . $result );
+		if ( strcmp( $result, self::TALK_RESULT_COMPLETE ) != 0 ) {
+			AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+			return $result;
+		} else {
+			;
+		}
+
+        // 更新カラム配列の設定
+        $updateArray = array();
+		if ( strlen( $talk ) > 0 ) {
+			$updateArray['talk'] = $talk;
+		} else {
+			;
+		}
+		$updateArray['talk_date'] = date( 'YmdHis' );
+		$updateArray['update_time'] = date( 'YmdHis' );
+		
+        // 書き込み
+		DataClassFactory::getTalkDataObj() -> update( $userNum, $seq_num, self::TALK_USER_DELETE_FLG_FALSE, $updateArray );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+        
+	}
+
+    /**
+	 * トークデータ削除
+	 * @param string $userNum
+	 * @param string $seq_num
+	 */
+	public static function deleteTalkData( $userNum, $seq_num ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'userNum:'  . $userNum );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'seq_num:'  . $seq_num );
+
+        // 更新カラム配列の設定
+        $updateArray = array();
+		$updateArray['user_delete_flg'] = self::TALK_USER_DELETE_FLG_TRUE;
+		$updateArray['update_time'] = date( 'YmdHis' );
+
+        // 書き込み
+		DataClassFactory::getTalkDataObj() -> update( $userNum, $seq_num, self::TALK_USER_DELETE_FLG_FALSE, $updateArray );
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
+    
 	//----------------------------------- priavte static ------------------------------------
 	
 	/**

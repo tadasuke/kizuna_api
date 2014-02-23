@@ -10,7 +10,7 @@ class TalkData extends AK_Db{
 	 * @param int $getRecordCount
 	 * @param int $startSeqNum
 	 */
-	public function getData( $getRecordCount = NULL, $seqNum = NULL, $userNum = NULL, $themeId = NULL, $startSeqNum = NULL, $userDeleteFlg = NULL ) {
+	public function getData( $getRecordCount = NULL, $seqNum = NULL, $userNum = NULL, $themeId = NULL, $startSeqNum = NULL, $userDeleteFlg = NULL, $searchWord = NULL ) {
 		
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'seqNum:'         . $seqNum );
@@ -18,6 +18,7 @@ class TalkData extends AK_Db{
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'themeId:'        . $themeId );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'getRecordCount:' . $getRecordCount );
 		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'startSeqNum:'    . $startSeqNum );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'searchWord:'     . $searchWord );
 		
 		$this -> sqlcmd =
 			"SELECT "
@@ -69,7 +70,14 @@ class TalkData extends AK_Db{
 		} else {
 			;
 		}
-		
+
+		if ( is_null( $searchWord ) === FALSE ) {
+			$this -> sqlcmd .= "AND talk like ? ";
+			$this -> bindArray[] = "%" . $searchWord . "%";
+		} else {
+			;
+		}
+
 		$this -> sqlcmd .= "ORDER BY seq_num ASC ";
 		
 		if ( is_null( $getRecordCount ) === FALSE ) {
@@ -139,4 +147,51 @@ class TalkData extends AK_Db{
 		
 	}
 	
+	/**
+	 * アップデート
+	 * @param int $user_num
+	 * @param string $seq_num
+	 * @param string $userDeleteFlg
+	 * @param array $updateArray
+	 */
+	public function update( $user_num, $seq_num, $user_delete_flg, array $updateArray ) {
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'START' );
+
+        AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'user_num:'       . $user_num );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'seq_num:'        . $seq_num );
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'user_delete_flg:'. $user_delete_flg );
+		
+		$sqlcmd =
+			"UPDATE talk_data "
+			. "SET "
+			;
+		$bindArray = array();
+		foreach ( $updateArray as $key => $value ) {
+			$sqlcmd .= $key . ' = ? ';
+			$sqlcmd .= ',';
+			$bindArray[] = $value;
+		}
+
+		// 末尾のカンマを削除
+		$sqlcmd = substr( $sqlcmd, 0, strlen( $sqlcmd ) - 1 );
+
+		$sqlcmd .= " WHERE user_num = ? "
+            . "AND seq_num = ? "
+            . "AND user_delete_flg = ? "
+            ;
+		$bindArray[] = $user_num;
+		$bindArray[] = $seq_num;
+		$bindArray[] = $user_delete_flg;
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'sqlcmd:' . $sqlcmd );
+	
+		$this -> sqlcmd    = $sqlcmd;
+		$this -> bindArray = $bindArray;
+		
+		$this -> exec();
+		
+		AK_Log::getLogClass() -> log( AK_Log::INFO, __METHOD__, __LINE__, 'END' );
+		
+	}
 }

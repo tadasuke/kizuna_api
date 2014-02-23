@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>API_テスト</title>
+</head>
+<body>
+
+<h1>ユーザ情報変更</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/user/update-user-data" method="GET">
+	gender:<input type="text" name="gender" /><br/>
+	birthday:<input type="text" name="birthday" /><br/>
+	address:<input type="text" name="address" /><br/>
+	telephone_number_1:<input type="text" name="telephone_number_1" /><br/>
+	telephone_number_2:<input type="text" name="telephone_number_2" /><br/>
+	profile_ime_key:<input type="text" name="profile_ime_key" /><br/>
+	<input type="submit" value="送信"/>
+</form>
+<img id="img_pro_key" src="http://miyashita.api.ki2na.madfaction.net/img/get-profile-img?user_num=43">
+
+<hr/>
+
+<h1>画像取得</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/img/get-img" method="GET">
+	img_key:<input type="text" name="img_key" /><br/>
+	<input type="submit" value="送信"/>
+</form>
+<img id="img_pro" src="http://miyashita.api.ki2na.madfaction.net/img/get-img?img_key=5cc43cd8e62635d05b110bdc6ba3f5acafb97bb2">
+
+<hr/>
+
+<h1>画像データ取得</h1>
+	img_key:<input type="text" name="img_key" id="img_param" /><br/>
+	<input type="button" value="送信" id="img_button" />
+    <img id="img_attr" src="">
+    <input type="text" id="img_attr2" />
+<hr/>
+
+<h1>画像アップ</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/img/upload" method="POST" enctype="multipart/form-data">
+	<input type="file" name="upload_file" />
+	<input type="submit" value="送信"/>
+</form>
+
+<hr/>
+
+<h1>コメント実行</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/talk/exec-comment" method="GET">
+	talk_seq_num:<input type="text" name="talk_seq_num" /><br/>
+	comment:<input type="text" name="comment" /><br/>
+	<input type="submit" value="送信"/>
+</form>
+
+<hr/>
+
+<h1>トーク取得</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/talk/get-talk" method="GET">
+	theme_id:<input type="text" name="theme_id" /><br/>
+	talk_user_key:<input type="text" name="talk_user_key" /><br/>
+	talk_seq_num:<input type="text" name="talk_seq_num" /><br/>
+	start_seq_num:<input type="text" name="start_seq_num" /><br/>
+	data_count:<input type="text" name="data_count" /><br/>
+	search_word:<input type="text" name="search_word" /><br/>
+	<input type="submit" value="送信"/>
+</form>
+
+<hr/>
+
+<h1>テーマ取得</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/talk/get-theme" method="GET">
+	<input type="text" name="theme_id" />
+	<input type="submit" value="送信"/>
+</form>
+
+<hr/>
+
+<h1>トーク実行</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/talk/exec-talk" method="GET">
+	theme_id:<input type="text" name="theme_id" /><br/>
+	talk:<input type="text" name="talk" /><br/>
+	<input type="submit" value="送信"/>
+</form>
+
+<hr/>
+
+<h1>トーク更新</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/talk/update-talk-data" method="GET">
+	seq_num:<input type="text" name="seq_num" /><br/>
+	theme_id:<input type="text" name="theme_id" /><br/>
+	talk:<input type="text" name="talk" /><br/>
+	<input type="submit" value="送信"/>
+</form>
+
+<hr/>
+
+<h1>トーク削除</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/talk/delete-talk-data" method="GET">
+	seq_num:<input type="text" name="seq_num" /><br/>
+	<input type="submit" value="送信"/>
+</form>
+
+<hr/>
+
+<h1>ユーザデータ取得</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/user/get-user-data" method="GET">
+	target_user_key:<input type="text" name="target_user_key" /><br/>
+	get_param:<input type="text" name="get_param" /><br/>
+	<input type="submit" value="送信"/>
+</form>
+
+<hr/>
+
+<h1>ログアウト</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/login/logout" method="GET">
+	<input type="submit" value="送信"/>
+</form>
+
+<hr/>
+
+<h1>ログイン</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/login/login" method="GET">
+	mail_address:<input type="text" name="mail_address" /><br/>
+	password:<input type="text" name="password" /><br/>
+	<input type="submit" value="送信"/>
+</form>
+
+<hr/>
+
+<h1>新規登録</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/login/new-entry" method="GET">
+	mail_address:<input type="text" name="mail_address" /><br/>
+	password:<input type="text" name="password" /><br/>
+	name:<input type="text" name="name" /><br/>
+	<input type="submit" value="送信"/>
+</form>
+
+<hr/>
+
+<h1>仮登録</h1>
+<form action="http://miyashita.api.ki2na.madfaction.net:80/regist/temp-regist" method="GET">
+mail_address:<input type="text" name="mail_address" /><br/>
+password:<input type="text" name="password" /><br/>
+name:<input type="text" name="name" /><br/>
+<input type="submit" value="送信"/>
+</form>
+
+<hr/>
+
+</body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js" type="text/javascript" charset="UTF-8"></script>
+<script type="text/javascript">
+	var baseUrl = 'http://miyashita.api.ki2na.madfaction.net:80/'
+
+	jQuery(function($){
+        $("#img_button").click( function() {
+			var img_key = $("#img_param").val();
+
+			$.ajax(
+                {
+				dataType : 'jsonp'
+					, data     : {
+                        img_key : img_key }
+				    , url      : baseUrl + 'img/get-img-data'
+					, cache    : false
+					, async    : true
+					, type     : 'get'
+					, success  : function( data ) {
+//			             var result = data.Result[0].['img'];
+                         $("#img_param").value( data );
+			             $("#img_attr2").value( data );
+//			             $("#img_attr").src( result );
+		              }
+	           }
+            );
+        } );
+    } );
+</script>
+</html>

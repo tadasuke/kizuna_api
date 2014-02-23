@@ -1,22 +1,23 @@
 <?php
 
 
-require_once 'Zend/Debug.php';
+require_once '/usr/local/include/php/Zend/Debug.php';
 
 
 
 
 
-require_once 'Akatsuki/AK_Ini.php';
-require_once 'Akatsuki/AK_Config.php';
-require_once 'Akatsuki/AK_Core.php';
-require_once 'Akatsuki/AK_Registry.php';
-require_once 'Akatsuki/AK_Log.php';
-require_once 'Akatsuki/AK_Db.php';
-require_once 'Akatsuki/AK_Gadget.php';
-require_once 'Akatsuki/AK_Exception.php';
+require_once '/usr/local/include/php/Akatsuki/AK_Ini.php';
+require_once '/usr/local/include/php/Akatsuki/AK_Config.php';
+require_once '/usr/local/include/php/Akatsuki/AK_Core.php';
+require_once '/usr/local/include/php/Akatsuki/AK_Registry.php';
+require_once '/usr/local/include/php/Akatsuki/AK_Log.php';
+require_once '/usr/local/include/php/Akatsuki/AK_Db.php';
+require_once '/usr/local/include/php/Akatsuki/AK_Gadget.php';
+require_once '/usr/local/include/php/Akatsuki/AK_Exception.php';
 
-define( 'BASE_PATH', '/web/api_ki2na/' );
+//define( 'BASE_PATH', '/web/api_ki2na/' );
+define( 'BASE_PATH', '/web/miyashita_api_ki2na/' );
 
 set_include_path( get_include_path() . PATH_SEPARATOR . BASE_PATH );
 
